@@ -247,3 +247,17 @@ test("fișierul CSS nu conține reguli goale (semn de curățare incompletă)", 
   const goale = [...CSS.matchAll(/([.#][\w-]+(?:\s*[,>+~]\s*[.#:\[\]\w-]+)*)\s*\{\s*\}/g)];
   assert.deepEqual(goale.map((m) => m[1]), [], "există selectori cu bloc de reguli gol");
 });
+
+test("cache-ul lung pentru assets/ e sigur doar pentru că adresele au hash de conținut", () => {
+  const toml = citeste("netlify.toml");
+  const bloc = toml.match(/for = "\/assets\/\*"[\s\S]*?Cache-Control = "([^"]+)"/);
+  assert.ok(bloc, "lipsește regula de cache pentru /assets/*");
+  assert.match(bloc[1], /max-age=31536000/,
+    "cache-ul pentru assets/ ar trebui să fie foarte lung, de vreme ce adresele sunt versionate cu ?v=hash");
+  assert.match(bloc[1], /immutable/);
+
+  // regula are sens doar dacă șablonul chiar adaugă ?v=hash pe linkuri
+  const base = citeste("src/_includes/layouts/base.njk");
+  assert.match(base, /style\.css\?v=\{\{\s*assets\.css\s*\}\}/,
+    "cache-ul lung e nesigur dacă linkul CSS nu mai are hash de versiune");
+});

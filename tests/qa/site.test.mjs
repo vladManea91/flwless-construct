@@ -6,6 +6,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import path from "node:path";
+import crypto from "node:crypto";
 import {
   existaBuild, pagini, pagina, citeste, citesteJson,
   sursaReala, existaInBuild, fisiere, SITE
@@ -521,4 +522,37 @@ test("meniul mobil se închide la Escape și la click pe o legătură", () => {
   const js = citeste("src/assets/js/site.js");
   assert.match(js, /Escape/);
   assert.match(js, /addEventListener\("click", function \(\) \{ inchideMeniul/);
+});
+
+test("antetul rămâne deasupra sertarului mobil, ca hamburgerul să poată închide meniul singur", () => {
+  // regresie: sertarul avea z-index mai mare decât antetul, deci acoperea
+  // butonul de hamburger — se putea deschide meniul, dar nu se mai putea închide.
+  const css = citeste("src/assets/css/style.css");
+  const zAntet = Number(css.match(/\.antet\s*\{[^}]*z-index:\s*(\d+)/)[1]);
+  const zSertar = Number(css.match(/\.navigatie-mobil\s*\{[^}]*z-index:\s*(\d+)/)[1]);
+  assert.ok(zAntet > zSertar,
+    `antetul (z-index ${zAntet}) trebuie să fie deasupra sertarului (z-index ${zSertar})`);
+});
+
+test("sertarul mobil pornește sub antet, nu peste el", () => {
+  const css = citeste("src/assets/css/style.css");
+  const bloc = css.match(/\.navigatie-mobil\s*\{([^}]*)\}/)[1];
+  assert.ok(!/inset:\s*0/.test(bloc), "sertarul nu mai trebuie să acopere tot ecranul de la y=0");
+  assert.match(bloc, /top:\s*\d/, "sertarul trebuie să înceapă de sub înălțimea antetului");
+});
+
+test("CSS-ul și JS-ul principale au adresă cu hash de conținut, ca să nu rămână în cache la actualizări", () => {
+  const html = pagina("/").html;
+  assert.match(html, /assets\/css\/style\.css\?v=[0-9a-f]{6,}/,
+    "CSS-ul trebuie servit cu ?v=<hash>, altfel un redeploy poate rămâne cu stilul vechi în cache-ul browserului");
+  assert.match(html, /assets\/js\/site\.js\?v=[0-9a-f]{6,}/,
+    "JS-ul principal trebuie servit cu ?v=<hash>, din același motiv");
+});
+
+test("hash-ul de cache-busting se schimbă dacă schimbi conținutul fișierului", () => {
+  const continut = citeste("src/assets/js/site.js");
+  const hashAsteptat = crypto.createHash("sha1").update(continut).digest("hex").slice(0, 10);
+  const html = pagina("/").html;
+  assert.match(html, new RegExp(`site\\.js\\?v=${hashAsteptat}`),
+    "hash-ul din HTML nu corespunde cu conținutul curent al fișierului — build-ul e neactualizat");
 });

@@ -10,10 +10,13 @@
   node_bundler = "esbuild"
 
 # Cache lung pentru fisierele statice
+# Fisierele CSS/JS au ?v=<hash> in adresa, deci un cache foarte lung e sigur:
+# continutul nu se schimba niciodata sub aceeasi adresa. Cand fisierul chiar
+# se schimba, hash-ul se schimba, deci adresa e alta si cache-ul vechi nu mai e folosit.
 [[headers]]
   for = "/assets/*"
   [headers.values]
-    Cache-Control = "public, max-age=604800"
+    Cache-Control = "public, max-age=31536000, immutable"
 
 [[headers]]
   for = "/images/*"
