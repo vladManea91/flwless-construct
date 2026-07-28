@@ -297,7 +297,6 @@ collections:
               - { label: "Nume afișat", name: "eticheta", widget: "string" }
               - { label: "Link", name: "link", widget: "string", hint: "/ pentru Acasă, /proiecte/, /galerie/, /contact/" }
 
-          - { label: "Buton din meniu (text)", name: "buton_antet_text", widget: "string", required: false }
           - { label: "Text în subsol", name: "footer_text", widget: "text", required: false }
 
           - { label: "Culoare text și fundaluri închise", name: "culoare_text", widget: "color", default: "#16202a" }

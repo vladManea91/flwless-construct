@@ -6,10 +6,11 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import path from "node:path";
+import fs from "node:fs";
 import crypto from "node:crypto";
 import {
-  existaBuild, pagini, pagina, citeste, citesteJson,
-  sursaReala, existaInBuild, fisiere, SITE
+  existaBuild, pagini, pagina, citeste, citesteJson, citesteYaml,
+  sursaReala, existaInBuild, fisiere, SITE, RADACINA
 } from "../ajutor.mjs";
 
 const site = citesteJson("src/_data/site.json");
@@ -346,13 +347,6 @@ test("pagina unui proiect afișează fișa tehnică și galeria lui", () => {
   assert.ok($('a[href="/proiecte/"]').length >= 1, "lipsește legătura înapoi la listă");
 });
 
-test("bara fixă de contact de pe telefon are ambele acțiuni", () => {
-  const $ = pagina("/").$;
-  assert.equal($(".bara-mobil a").length, 2);
-  assert.ok($('.bara-mobil a[href^="tel:"]').length === 1);
-  assert.ok($('.bara-mobil a[href^="mailto:"]').length === 1);
-});
-
 test("statisticile se încarcă doar dacă sunt pornite din setări", () => {
   const areScript = pagina("/").html.includes("/assets/js/analitice.js");
   assert.equal(areScript, Boolean(site.analitice_interne),
@@ -450,24 +444,71 @@ test("numele vechi al firmei nu mai apare nicăieri în site-ul construit", () =
 test("telefonul și emailul din setări sunt cele noi", () => {
   assert.equal(site.telefon, "+40 730 122 097");
   assert.equal(contact.telefon, "+40 730 122 097");
-  assert.equal(site.email, "wless.construct@gmail.com");
-  assert.equal(contact.email, "wless.construct@gmail.com");
+  assert.equal(site.email, "flawless.construct@gmail.com");
+  assert.equal(contact.email, "flawless.construct@gmail.com");
 });
 
-test("legătura de telefon din antet sună la numărul nou", () => {
-  const href = pagina("/").$('.navigatie-desktop a[href^="tel:"]').attr("href");
-  assert.equal(href, "tel:+40730122097");
+test("antetul nu mai are nicio legătură de telefon sau email — doar pagina Contact", () => {
+  const $ = pagina("/").$;
+  assert.equal($('.navigatie-desktop a[href^="tel:"]').length, 0);
+  assert.equal($('.navigatie-desktop a[href^="mailto:"]').length, 0);
+  assert.equal($('.navigatie-mobil a[href^="tel:"]').length, 0);
+  assert.equal($('.navigatie-mobil a[href^="mailto:"]').length, 0);
 });
 
-test("butonul din antet spune Contactează-ne, nu Sună acum", () => {
-  const antetText = pagina("/").$(".navigatie-desktop .btn").text().trim();
-  assert.equal(antetText, "Contactează-ne");
-  assert.ok(!pagina("/").html.includes("Sună acum"), "a rămas textul vechi „Sună acum”");
+test("pagina de contact sună și scrie la datele noi", () => {
+  const $ = pagina("/contact/").$;
+  assert.equal($('a[href^="tel:"]').first().attr("href"), "tel:+40730122097");
+  assert.ok($('a[href^="mailto:"]').first().attr("href").startsWith("mailto:flawless.construct@gmail.com"));
 });
 
-test("bara fixă de pe telefon folosește același text de contact", () => {
-  const text = pagina("/").$(".bara-mobil a").last().text().trim();
-  assert.equal(text, "Contactează-ne");
+test("nu mai există un buton de contact în antet — Contact e doar o pagină în meniu", () => {
+  const $ = pagina("/").$;
+  assert.equal($(".antet .btn").length, 0, "antetul nu mai trebuie să aibă un buton de contact");
+  assert.equal($(".navigatie-desktop .btn").length, 0);
+  assert.ok(!pagina("/").html.includes("Contactează-ne"),
+    "textul „Contactează-ne” nu mai trebuie să apară în afara paginii de contact");
+});
+
+test("bara fixă de contact de pe telefon a fost eliminată", () => {
+  assert.equal(pagina("/").$(".bara-mobil").length, 0, "bara-mobil nu mai trebuie să existe în pagină");
+  assert.ok(!fs.existsSync(path.join(RADACINA, "src/_includes/partials/bara-mobil.njk")),
+    "fișierul bara-mobil.njk ar trebui șters, nu doar dezactivat");
+  assert.ok(!citeste("src/_includes/layouts/base.njk").includes("bara-mobil"),
+    "layout-ul de bază nu mai trebuie să includă bara-mobil");
+});
+
+test("sloganul apare direct sub logo, în antet, pe orice ecran", () => {
+  const $ = pagina("/").$;
+  const marca = $(".marca");
+  assert.equal(marca.children("img").length, 1, "lipsește imaginea logo-ului din antet");
+  const tag = marca.find(".marca__tag");
+  assert.equal(tag.length, 1, "lipsește sloganul din antet");
+  assert.equal(tag.text().trim(), site.tagline);
+  // ordinea în DOM garantează ordinea vizuală într-un lockup stivuit pe coloană
+  const copii = marca.children().toArray();
+  const indexImg = copii.findIndex((el) => el.tagName === "img");
+  const indexTag = copii.findIndex((el) => $(el).hasClass("marca__tag"));
+  assert.ok(indexImg < indexTag, "sloganul trebuie să fie după logo în DOM, adică sub el vizual");
+});
+
+test("sloganul din antet nu mai e ascuns pe mobil", () => {
+  const css = citeste("src/assets/css/style.css");
+  const bloc = css.match(/\.marca__tag\s*\{([^}]*)\}/)[1];
+  assert.ok(!/display:\s*none/.test(bloc), "sloganul nu mai trebuie ascuns implicit");
+  assert.match(bloc, /display:\s*block/);
+});
+
+test("lockup-ul logo + slogan e stivuit pe coloană, nu unul lângă altul", () => {
+  const css = citeste("src/assets/css/style.css");
+  const bloc = css.match(/\.marca\s*\{([^}]*)\}/)[1];
+  assert.match(bloc, /flex-direction:\s*column/, "logo-ul și sloganul trebuie stivuite, nu puse unul lângă altul");
+});
+
+test("câmpul mort „buton din meniu” a fost scos din panoul de administrare", () => {
+  const cms = citesteYaml("src/admin/config.yml");
+  assert.ok(!JSON.stringify(cms).includes("buton_antet_text"),
+    "câmpul buton_antet_text nu mai trebuie să apară în admin/config.yml, de vreme ce butonul nu mai există");
 });
 
 test("persoana de contact este Gabriel, fără funcție afișată", () => {

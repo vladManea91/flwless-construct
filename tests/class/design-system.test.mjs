@@ -105,9 +105,9 @@ test("aurul din logo, pe fundalul închis al antetului, trece pragul pentru elem
     `contrast ${r.toFixed(2)}:1 — motivul pentru care antetul și subsolul sunt închise la culoare`);
 });
 
-test("textul butonului auriu (Contactează-ne) trece AA pe fundalul lui", () => {
+test("textul butonului auriu (folosit în banda CTA și la hover) trece AA pe fundalul lui", () => {
   const r = raport("suprafata-inchisa pe accent", "var(--suprafata-inchisa)", "var(--accent)");
-  assert.ok(r >= PRAG_TEXT, `contrast ${r.toFixed(2)}:1 — .navigatie-desktop .btn`);
+  assert.ok(r >= PRAG_TEXT, `contrast ${r.toFixed(2)}:1 — .cta .btn, .btn:hover`);
 });
 
 test("butonul implicit (.btn: fundal ink, text paper) trece AA", () => {
