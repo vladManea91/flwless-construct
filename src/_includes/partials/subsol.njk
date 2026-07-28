@@ -1,0 +1,42 @@
+<footer class="subsol">
+  <div class="wrap">
+    <div class="subsol__grid">
+      <div>
+        <div class="subsol__nume">{{ site.nume }}</div>
+        <p>{{ site.footer_text }}</p>
+      </div>
+
+      <div>
+        <div class="subsol__titlu">Pagini</div>
+        <ul>
+          {% for element in site.meniu %}
+            <li><a href="{{ element.link }}">{{ element.eticheta }}</a></li>
+          {% endfor %}
+        </ul>
+      </div>
+
+      <div>
+        <div class="subsol__titlu">Contact</div>
+        <ul>
+          {% if site.telefon %}<li><a href="tel:{{ site.telefon | telLink }}">{{ site.telefon }}</a></li>{% endif %}
+          {% if site.email %}<li><a href="mailto:{{ site.email }}">{{ site.email }}</a></li>{% endif %}
+          {% if site.oras %}<li>{{ site.oras }}</li>{% endif %}
+        </ul>
+
+        {% if site.facebook or site.instagram or site.tiktok %}
+          <div class="subsol__titlu" style="margin-top:1.25rem">Social</div>
+          <ul>
+            {% if site.facebook %}<li><a href="{{ site.facebook }}" rel="noopener">Facebook</a></li>{% endif %}
+            {% if site.instagram %}<li><a href="{{ site.instagram }}" rel="noopener">Instagram</a></li>{% endif %}
+            {% if site.tiktok %}<li><a href="{{ site.tiktok }}" rel="noopener">TikTok</a></li>{% endif %}
+          </ul>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="subsol__jos">
+      <span>© {{ build.an }} {{ site.nume }}. Toate drepturile rezervate.</span>
+      <span>Administrare site: <a href="/admin/">intră în panou</a></span>
+    </div>
+  </div>
+</footer>

@@ -1,0 +1,10 @@
+{% if site.telefon or site.email %}
+<div class="bara-mobil" aria-label="Contact rapid">
+  {% if site.email %}
+    <a href="mailto:{{ site.email }}" data-eveniment="email-bara">Trimite email</a>
+  {% endif %}
+  {% if site.telefon %}
+    <a href="tel:{{ site.telefon | telLink }}" data-eveniment="telefon-bara">Sună acum</a>
+  {% endif %}
+</div>
+{% endif %}

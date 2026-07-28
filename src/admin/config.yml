@@ -1,0 +1,315 @@
+# =====================================================================
+#  PANOU DE ADMINISTRARE
+#  Aici se configurează ce poate edita clientul. Textele sunt în română.
+#  Vezi README.md, secțiunea "Autentificare", pentru site-id.
+# =====================================================================
+
+backend:
+  name: git-gateway
+  repo: UTILIZATOR-GITHUB/NUME-REPO          # <- înlocuiește
+  branch: main
+  identity_url: https://auth.decapbridge.com/sites/SITE-ID-DE-LA-DECAPBRIDGE   # <- înlocuiește
+  gateway_url: https://gateway.decapbridge.com
+  commit_messages:
+    create: 'Adăugat {{collection}} "{{slug}}" - {{author-name}}'
+    update: 'Modificat {{collection}} "{{slug}}" - {{author-name}}'
+    delete: 'Șters {{collection}} "{{slug}}" - {{author-name}}'
+    uploadMedia: 'Încărcat "{{path}}" - {{author-name}}'
+    deleteMedia: 'Șters "{{path}}" - {{author-name}}'
+
+logo_url: https://decapbridge.com/decapcms-with-bridge.svg
+site_url: https://numele-site-ului.netlify.app          # <- înlocuiește
+display_url: https://numele-site-ului.netlify.app       # <- înlocuiește
+
+locale: ro
+publish_mode: simple
+
+media_folder: "src/images/uploads"
+public_folder: "/images/uploads"
+
+media_library:
+  config:
+    max_file_size: 12000000
+
+editor:
+  preview: false
+
+collections:
+  # -------------------------------------------------------------------
+  - name: proiecte
+    label: "Proiecte"
+    label_singular: "Proiect"
+    description: "Fiecare proiect apare pe pagina Proiecte și are pagina lui, cu poze și text."
+    folder: "src/proiecte"
+    create: true
+    delete: true
+    slug: "{{slug}}"
+    summary: "{{titlu}} — {{categorie}}"
+    sortable_fields: ["ordine", "date", "titlu"]
+    fields:
+      - label: "Numele proiectului"
+        name: "titlu"
+        widget: "string"
+        hint: "De exemplu: Apartament 3 camere, Titan"
+
+      - label: "Categorie"
+        name: "categorie"
+        widget: "select"
+        options: ["Apartament", "Casă", "Baie", "Bucătărie", "Birou", "Altele"]
+        default: "Apartament"
+        hint: "Se folosește pentru butoanele de filtrare de pe pagina Proiecte."
+
+      - label: "Descriere scurtă"
+        name: "rezumat"
+        widget: "text"
+        required: false
+        hint: "Una sau două propoziții. Apar sub numele proiectului pe listă."
+
+      - label: "Poza principală"
+        name: "coperta"
+        widget: "image"
+        required: false
+        hint: "Poza mare, afișată pe listă și în capul paginii."
+
+      - label: "Locație"
+        name: "locatie"
+        widget: "string"
+        required: false
+
+      - label: "Suprafață"
+        name: "suprafata"
+        widget: "string"
+        required: false
+        hint: "De exemplu: 72 mp"
+
+      - label: "Durata lucrării"
+        name: "durata"
+        widget: "string"
+        required: false
+        hint: "De exemplu: 10 săptămâni"
+
+      - label: "Data finalizării"
+        name: "date"
+        widget: "datetime"
+        date_format: "DD.MM.YYYY"
+        time_format: false
+        picker_utc: true
+
+      - label: "Ordine pe pagină"
+        name: "ordine"
+        widget: "number"
+        default: 10
+        value_type: "int"
+        hint: "1 apare primul, 2 al doilea și așa mai departe."
+
+      - label: "Ascunde de pe site"
+        name: "ascuns"
+        widget: "boolean"
+        default: false
+        required: false
+        hint: "Bifează dacă vrei să lucrezi la proiect fără să apară pe site."
+
+      - label: "Textul proiectului"
+        name: "body"
+        widget: "markdown"
+        modes: ["raw"]
+        required: false
+        hint: "Scrie normal. Un rând gol între paragrafe."
+
+      - label: "Ce am făcut (listă)"
+        name: "lucrari"
+        widget: "list"
+        required: false
+        label_singular: "Lucrare"
+        summary: "{{fields.text}}"
+        fields:
+          - { label: "Lucrare", name: "text", widget: "string" }
+
+      - label: "Poze din lucrare"
+        name: "galerie"
+        widget: "list"
+        required: false
+        label_singular: "Poză"
+        summary: "{{fields.descriere}}"
+        fields:
+          - { label: "Poză", name: "imagine", widget: "image" }
+          - { label: "Descriere", name: "descriere", widget: "string", required: false }
+
+  # -------------------------------------------------------------------
+  - name: galerie
+    label: "Galerie foto"
+    files:
+      - name: galerie
+        label: "Pagina Galerie"
+        file: "src/_data/galerie.json"
+        fields:
+          - { label: "Etichetă mică", name: "eticheta", widget: "string", required: false }
+          - { label: "Titlu pagină", name: "titlu", widget: "string" }
+          - { label: "Text introductiv", name: "intro", widget: "text", required: false }
+          - label: "Poze"
+            name: "imagini"
+            widget: "list"
+            label_singular: "Poză"
+            summary: "{{fields.descriere}} ({{fields.categorie}})"
+            fields:
+              - { label: "Poză", name: "imagine", widget: "image" }
+              - { label: "Descriere", name: "descriere", widget: "string", required: false }
+              - label: "Categorie"
+                name: "categorie"
+                widget: "select"
+                required: false
+                options: ["Apartament", "Casă", "Baie", "Bucătărie", "Birou", "Altele"]
+                hint: "Dacă pui categorii, apar butoane de filtrare deasupra pozelor."
+          - { label: "Titlu pentru Google", name: "seo_titlu", widget: "string", required: false }
+          - { label: "Descriere pentru Google", name: "seo_descriere", widget: "text", required: false }
+
+  # -------------------------------------------------------------------
+  - name: pagini
+    label: "Pagini"
+    files:
+      - name: acasa
+        label: "Acasă"
+        file: "src/_data/acasa.json"
+        fields:
+          - label: "Sus de tot (prima imagine)"
+            name: "hero_eticheta"
+            widget: "string"
+            required: false
+            hint: "Textul mic scris cu majuscule, deasupra titlului."
+          - { label: "Titlu mare", name: "hero_titlu", widget: "string" }
+          - { label: "Text sub titlu", name: "hero_text", widget: "text", required: false }
+          - { label: "Poza de fundal", name: "hero_imagine", widget: "image", required: false }
+          - { label: "Buton principal (text)", name: "hero_buton_text", widget: "string", required: false }
+          - { label: "Buton principal (link)", name: "hero_buton_link", widget: "string", required: false, default: "/proiecte/" }
+          - { label: "Buton secundar (text)", name: "hero_buton_secundar_text", widget: "string", required: false, hint: "Sună la numărul din Setări." }
+
+          - label: "Cifre pe bandă"
+            name: "cifre"
+            widget: "list"
+            required: false
+            label_singular: "Cifră"
+            summary: "{{fields.valoare}} {{fields.eticheta}}"
+            fields:
+              - { label: "Cifra", name: "valoare", widget: "string" }
+              - { label: "Sub cifră", name: "eticheta", widget: "string" }
+
+          - { label: "Cine suntem — etichetă", name: "despre_eticheta", widget: "string", required: false }
+          - { label: "Cine suntem — titlu", name: "despre_titlu", widget: "string", required: false }
+          - label: "Cine suntem — text"
+            name: "despre_text"
+            widget: "text"
+            required: false
+            hint: "Lasă un rând gol între paragrafe."
+          - { label: "Cine suntem — poză", name: "despre_imagine", widget: "image", required: false }
+
+          - { label: "Servicii — etichetă", name: "servicii_eticheta", widget: "string", required: false }
+          - { label: "Servicii — titlu", name: "servicii_titlu", widget: "string", required: false }
+          - label: "Servicii"
+            name: "servicii"
+            widget: "list"
+            required: false
+            label_singular: "Serviciu"
+            summary: "{{fields.titlu}}"
+            fields:
+              - { label: "Titlu", name: "titlu", widget: "string" }
+              - { label: "Descriere", name: "descriere", widget: "text" }
+
+          - { label: "Cum lucrăm — etichetă", name: "pasi_eticheta", widget: "string", required: false }
+          - { label: "Cum lucrăm — titlu", name: "pasi_titlu", widget: "string", required: false }
+          - label: "Pași"
+            name: "pasi"
+            widget: "list"
+            required: false
+            label_singular: "Pas"
+            summary: "{{fields.titlu}}"
+            fields:
+              - { label: "Titlu", name: "titlu", widget: "string" }
+              - { label: "Descriere", name: "descriere", widget: "text" }
+
+          - { label: "Proiecte recente — etichetă", name: "proiecte_eticheta", widget: "string", required: false }
+          - { label: "Proiecte recente — titlu", name: "proiecte_titlu", widget: "string", required: false }
+          - { label: "Proiecte recente — text buton", name: "proiecte_buton_text", widget: "string", required: false }
+
+          - { label: "Chemare la acțiune — titlu", name: "cta_titlu", widget: "string", required: false, hint: "Banda închisă la culoare de la finalul paginilor." }
+          - { label: "Chemare la acțiune — text", name: "cta_text", widget: "text", required: false }
+          - { label: "Chemare la acțiune — buton", name: "cta_buton_text", widget: "string", required: false }
+
+          - { label: "Titlu pentru Google", name: "seo_titlu", widget: "string", required: false }
+          - { label: "Descriere pentru Google", name: "seo_descriere", widget: "text", required: false }
+
+      - name: proiecteIndex
+        label: "Proiecte (textul paginii)"
+        file: "src/_data/proiecteIndex.json"
+        fields:
+          - { label: "Etichetă mică", name: "eticheta", widget: "string", required: false }
+          - { label: "Titlu pagină", name: "titlu", widget: "string" }
+          - { label: "Text introductiv", name: "intro", widget: "text", required: false }
+          - { label: "Titlu pentru Google", name: "seo_titlu", widget: "string", required: false }
+          - { label: "Descriere pentru Google", name: "seo_descriere", widget: "text", required: false }
+
+      - name: contact
+        label: "Contact"
+        file: "src/_data/contact.json"
+        fields:
+          - { label: "Etichetă mică", name: "eticheta", widget: "string", required: false }
+          - { label: "Titlu pagină", name: "titlu", widget: "string" }
+          - { label: "Text introductiv", name: "intro", widget: "text", required: false }
+          - { label: "Nume persoană de contact", name: "nume", widget: "string" }
+          - { label: "Funcție", name: "rol", widget: "string", required: false }
+          - { label: "Fotografie", name: "fotografie", widget: "image", required: false }
+          - { label: "Telefon", name: "telefon", widget: "string", hint: "Se apelează direct de pe telefon." }
+          - { label: "Text sub telefon", name: "telefon_eticheta", widget: "string", required: false }
+          - { label: "WhatsApp", name: "whatsapp", widget: "string", required: false, hint: "Lasă gol dacă nu vrei buton de WhatsApp." }
+          - { label: "Email", name: "email", widget: "string", hint: "Se deschide direct aplicația de email." }
+          - { label: "Text sub email", name: "email_eticheta", widget: "string", required: false }
+          - { label: "Subiect completat automat în email", name: "email_subiect", widget: "string", required: false }
+          - { label: "Program", name: "program", widget: "text", required: false }
+          - { label: "Zonă de lucru", name: "zona", widget: "text", required: false }
+          - { label: "Adresă", name: "adresa", widget: "text", required: false }
+          - { label: "Notă de final", name: "nota", widget: "text", required: false }
+          - { label: "Titlu pentru Google", name: "seo_titlu", widget: "string", required: false }
+          - { label: "Descriere pentru Google", name: "seo_descriere", widget: "text", required: false }
+
+  # -------------------------------------------------------------------
+  - name: setari
+    label: "Setări site"
+    files:
+      - name: site
+        label: "Setări generale"
+        file: "src/_data/site.json"
+        fields:
+          - { label: "Numele firmei", name: "nume", widget: "string" }
+          - { label: "Slogan scurt", name: "tagline", widget: "string", required: false }
+          - { label: "Descriere pentru Google", name: "descriere", widget: "text" }
+          - { label: "Adresa site-ului", name: "url", widget: "string", hint: "Exemplu: https://numelesite.netlify.app (fără / la final)" }
+          - { label: "Oraș", name: "oras", widget: "string", required: false }
+          - { label: "Telefon", name: "telefon", widget: "string", required: false }
+          - { label: "Email", name: "email", widget: "string", required: false }
+          - { label: "Logo", name: "logo", widget: "image", required: false, hint: "Lasă gol ca să apară numele firmei scris." }
+          - { label: "Poză pentru distribuire pe Facebook/WhatsApp", name: "og_imagine", widget: "image", required: false }
+
+          - label: "Meniu"
+            name: "meniu"
+            widget: "list"
+            label_singular: "Element de meniu"
+            summary: "{{fields.eticheta}} → {{fields.link}}"
+            fields:
+              - { label: "Nume afișat", name: "eticheta", widget: "string" }
+              - { label: "Link", name: "link", widget: "string", hint: "/ pentru Acasă, /proiecte/, /galerie/, /contact/" }
+
+          - { label: "Buton din meniu (text)", name: "buton_antet_text", widget: "string", required: false }
+          - { label: "Text în subsol", name: "footer_text", widget: "text", required: false }
+
+          - { label: "Culoare text și fundaluri închise", name: "culoare_text", widget: "color", default: "#16202a" }
+          - { label: "Culoare de accent", name: "culoare_accent", widget: "color", default: "#a97b2f" }
+          - { label: "Culoare de fundal", name: "culoare_fundal", widget: "color", default: "#f3f3f0" }
+
+          - { label: "Link Facebook", name: "facebook", widget: "string", required: false }
+          - { label: "Link Instagram", name: "instagram", widget: "string", required: false }
+          - { label: "Link TikTok", name: "tiktok", widget: "string", required: false }
+
+          - label: "Statistici proprii"
+            name: "analitice_interne"
+            widget: "boolean"
+            default: true
+            hint: "Numără vizitatorii fără cookie-uri. Rezultatele se văd pe /statistici/."

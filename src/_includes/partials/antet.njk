@@ -1,0 +1,31 @@
+<header class="antet" data-antet data-deschis="false">
+  <div class="wrap antet__bara">
+    <a class="marca" href="/">
+      {% if site.logo %}
+        <img src="{{ site.logo | img(240) }}" alt="{{ site.nume }}">
+      {% else %}
+        <span>{{ site.nume }}</span>
+      {% endif %}
+      {% if site.tagline %}<span class="marca__tag">{{ site.tagline }}</span>{% endif %}
+    </a>
+
+    <button class="meniu-buton" type="button" data-meniu aria-expanded="false" aria-controls="navigatie">
+      <span class="meniu-buton__linii" aria-hidden="true"><i></i><i></i><i></i></span>
+      <span data-meniu-text>Meniu</span>
+    </button>
+
+    <nav class="navigatie" id="navigatie" aria-label="Navigare principală">
+      <ul>
+        {% for element in site.meniu %}
+          <li>
+            <a href="{{ element.link }}"
+               {% if page.url == element.link %}aria-current="page"{% endif %}>{{ element.eticheta }}</a>
+          </li>
+        {% endfor %}
+      </ul>
+      {% if site.telefon %}
+        <a class="btn" href="tel:{{ site.telefon | telLink }}" data-eveniment="telefon-antet">{{ site.buton_antet_text or "Sună acum" }}</a>
+      {% endif %}
+    </nav>
+  </div>
+</header>

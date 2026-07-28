@@ -1,0 +1,15 @@
+{% if acasa.cta_titlu %}
+<section class="cta">
+  <div class="wrap">
+    <p class="cota"><span>Următorul pas</span></p>
+    <h2>{{ acasa.cta_titlu }}</h2>
+    <p>{{ acasa.cta_text }}</p>
+    <div class="butoane">
+      <a class="btn" href="/contact/">{{ acasa.cta_buton_text or "Contactează-ne" }}</a>
+      {% if site.telefon %}
+        <a class="btn btn--ghost" href="tel:{{ site.telefon | telLink }}" data-eveniment="telefon-cta">{{ site.telefon }}</a>
+      {% endif %}
+    </div>
+  </div>
+</section>
+{% endif %}

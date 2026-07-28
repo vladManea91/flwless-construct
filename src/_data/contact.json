@@ -1,0 +1,20 @@
+{
+  "seo_titlu": "Contact",
+  "seo_descriere": "Sună sau scrie-ne pentru o estimare. Răspundem în aceeași zi lucrătoare.",
+  "eticheta": "Contact",
+  "titlu": "Vorbim direct, fără formulare",
+  "intro": "Sună, dă un mesaj sau scrie un email. Îți răspunde aceeași persoană care vine și la măsurători.",
+  "nume": "Andrei Popescu",
+  "rol": "Coordonator lucrări",
+  "fotografie": "/images/uploads/contact.jpg",
+  "telefon": "+40 721 000 000",
+  "telefon_eticheta": "Sună între 08:00 și 19:00",
+  "whatsapp": "+40 721 000 000",
+  "email": "contact@exemplu.ro",
+  "email_eticheta": "Răspundem în aceeași zi lucrătoare",
+  "email_subiect": "Cerere estimare lucrare",
+  "program": "Luni – Vineri, 08:00 – 19:00\nSâmbătă, 09:00 – 14:00",
+  "zona": "Lucrăm în București și Ilfov, pe raza a 40 km.",
+  "adresa": "",
+  "nota": "Dacă suntem pe șantier și nu răspundem, lasă un mesaj și te sunăm noi înapoi."
+}

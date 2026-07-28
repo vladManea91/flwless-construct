@@ -1,0 +1,100 @@
+---
+layout: layouts/base.njk
+permalink: /contact/
+eleventyComputed:
+  seo_titlu: "{{ contact.seo_titlu }}"
+  seo_descriere: "{{ contact.seo_descriere }}"
+---
+
+<section class="antet-pagina">
+  <div class="wrap">
+    {% if contact.eticheta %}<p class="cota"><span>{{ contact.eticheta }}</span></p>{% endif %}
+    <h1>{{ contact.titlu }}</h1>
+    {% if contact.intro %}<p>{{ contact.intro }}</p>{% endif %}
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap wrap--narrow">
+
+    <div class="persoana">
+      {% if contact.fotografie %}
+        <img src="{{ contact.fotografie | img(400, 1) }}"
+             srcset="{{ contact.fotografie | srcset(1, 768) }}"
+             sizes="10rem"
+             alt="{{ contact.nume }}" width="400" height="400">
+      {% endif %}
+      <div>
+        <p class="persoana__nume">{{ contact.nume }}</p>
+        <p class="persoana__rol">{{ contact.rol }}</p>
+      </div>
+    </div>
+
+    <div class="contacte">
+      {% if contact.telefon %}
+        <a class="contact-card" href="tel:{{ contact.telefon | telLink }}" data-eveniment="telefon-contact">
+          <span class="contact-card__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.2a2 2 0 0 1 2.1-.5c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2Z"/></svg>
+          </span>
+          <span>
+            <span class="contact-card__eticheta">Telefon</span>
+            <span class="contact-card__valoare">{{ contact.telefon }}</span>
+            {% if contact.telefon_eticheta %}<span class="contact-card__nota">{{ contact.telefon_eticheta }}</span>{% endif %}
+          </span>
+        </a>
+      {% endif %}
+
+      {% if contact.email %}
+        <a class="contact-card" href="mailto:{{ contact.email }}{% if contact.email_subiect %}?subject={{ contact.email_subiect | urlencode }}{% endif %}" data-eveniment="email-contact">
+          <span class="contact-card__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 6 10-6"/></svg>
+          </span>
+          <span>
+            <span class="contact-card__eticheta">Email</span>
+            <span class="contact-card__valoare">{{ contact.email }}</span>
+            {% if contact.email_eticheta %}<span class="contact-card__nota">{{ contact.email_eticheta }}</span>{% endif %}
+          </span>
+        </a>
+      {% endif %}
+
+      {% if contact.whatsapp %}
+        <a class="contact-card" href="https://wa.me/{{ contact.whatsapp | telLink | replace('+', '') }}" rel="noopener" data-eveniment="whatsapp">
+          <span class="contact-card__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-12.6 7.3L3 20.5l1.8-5.2A8.5 8.5 0 1 1 21 11.5Z"/></svg>
+          </span>
+          <span>
+            <span class="contact-card__eticheta">WhatsApp</span>
+            <span class="contact-card__valoare">{{ contact.whatsapp }}</span>
+            <span class="contact-card__nota">Trimite poze cu ce ai de făcut</span>
+          </span>
+        </a>
+      {% endif %}
+    </div>
+
+    <div class="info-blocuri">
+      {% if contact.program %}
+        <div class="info-bloc">
+          <h3>Program</h3>
+          <p>{{ contact.program }}</p>
+        </div>
+      {% endif %}
+      {% if contact.zona %}
+        <div class="info-bloc">
+          <h3>Zonă de lucru</h3>
+          <p>{{ contact.zona }}</p>
+        </div>
+      {% endif %}
+      {% if contact.adresa %}
+        <div class="info-bloc">
+          <h3>Adresă</h3>
+          <p>{{ contact.adresa }}</p>
+        </div>
+      {% endif %}
+    </div>
+
+    {% if contact.nota %}
+      <p style="margin-top:2rem;color:var(--ink-70);font-size:0.95rem">{{ contact.nota }}</p>
+    {% endif %}
+
+  </div>
+</section>

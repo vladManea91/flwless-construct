@@ -1,0 +1,55 @@
+---
+layout: layouts/base.njk
+permalink: /galerie/
+eleventyComputed:
+  seo_titlu: "{{ galerie.seo_titlu }}"
+  seo_descriere: "{{ galerie.seo_descriere }}"
+---
+
+<section class="antet-pagina">
+  <div class="wrap">
+    {% if galerie.eticheta %}<p class="cota"><span>{{ galerie.eticheta }}</span></p>{% endif %}
+    <h1>{{ galerie.titlu }}</h1>
+    {% if galerie.intro %}<p>{{ galerie.intro }}</p>{% endif %}
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    {% set categoriiG = [] %}
+    {% for poza in galerie.imagini %}
+      {% set categoriiG = (categoriiG.push(poza.categorie), categoriiG) %}
+    {% endfor %}
+    {% set categoriiG = categoriiG | unice %}
+
+    {% if categoriiG.length > 1 %}
+      <div class="filtre" data-filtre role="group" aria-label="Filtrează pozele">
+        <button class="filtru" type="button" data-filtru="toate" aria-pressed="true">Toate</button>
+        {% for categorie in categoriiG %}
+          <button class="filtru" type="button" data-filtru="{{ categorie }}" aria-pressed="false">{{ categorie }}</button>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    {% if galerie.imagini and galerie.imagini.length %}
+      <div class="galerie" data-galerie>
+        {% for poza in galerie.imagini %}
+          <figure class="galerie__item" role="button" tabindex="0"
+                  data-categorie="{{ poza.categorie }}"
+                  data-mare="{{ poza.imagine | img(1800) }}"
+                  data-descriere="{{ poza.descriere }}">
+            <img src="{{ poza.imagine | img(600, 1) }}"
+                 srcset="{{ poza.imagine | srcset(1, 1080) }}"
+                 sizes="(min-width: 68rem) 25vw, (min-width: 44rem) 33vw, 50vw"
+                 alt="{{ poza.descriere or galerie.titlu }}" loading="lazy" width="600" height="600">
+            {% if poza.descriere %}<figcaption>{{ poza.descriere }}</figcaption>{% endif %}
+          </figure>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="gol">Aici vor apărea pozele. Încarcă primele imagini din panoul de administrare.</p>
+    {% endif %}
+  </div>
+</section>
+
+{% include "partials/cta.njk" %}

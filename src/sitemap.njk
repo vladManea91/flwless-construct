@@ -1,0 +1,15 @@
+---
+permalink: /sitemap.xml
+eleventyExcludeFromCollections: true
+---
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  {%- for pagina in collections.all %}
+  {%- if not pagina.data.noindex and not pagina.url.endsWith(".html") %}
+  <url>
+    <loc>{{ site.url }}{{ pagina.url }}</loc>
+    <lastmod>{{ pagina.date | isoDate }}</lastmod>
+  </url>
+  {%- endif %}
+  {%- endfor %}
+</urlset>

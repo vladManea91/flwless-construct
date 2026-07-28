@@ -1,0 +1,46 @@
+---
+layout: layouts/base.njk
+permalink: /proiecte/
+eleventyComputed:
+  seo_titlu: "{{ proiecteIndex.seo_titlu }}"
+  seo_descriere: "{{ proiecteIndex.seo_descriere }}"
+---
+
+<section class="antet-pagina">
+  <div class="wrap">
+    {% if proiecteIndex.eticheta %}<p class="cota"><span>{{ proiecteIndex.eticheta }}</span></p>{% endif %}
+    <h1>{{ proiecteIndex.titlu }}</h1>
+    {% if proiecteIndex.intro %}<p>{{ proiecteIndex.intro }}</p>{% endif %}
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    {% set categorii = [] %}
+    {% for proiect in collections.proiecte %}
+      {% set categorii = (categorii.push(proiect.data.categorie), categorii) %}
+    {% endfor %}
+    {% set categorii = categorii | unice %}
+
+    {% if categorii.length > 1 %}
+      <div class="filtre" data-filtre role="group" aria-label="Filtrează proiectele">
+        <button class="filtru" type="button" data-filtru="toate" aria-pressed="true">Toate</button>
+        {% for categorie in categorii %}
+          <button class="filtru" type="button" data-filtru="{{ categorie }}" aria-pressed="false">{{ categorie }}</button>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    {% if collections.proiecte.length %}
+      <div class="proiecte-grid" data-lista-proiecte>
+        {% for proiect in collections.proiecte %}
+          {% include "partials/card-proiect.njk" %}
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="gol">Aici vor apărea proiectele. Adaugă primul proiect din panoul de administrare.</p>
+    {% endif %}
+  </div>
+</section>
+
+{% include "partials/cta.njk" %}

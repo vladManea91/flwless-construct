@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="ro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+{% set titluPagina = seo_titlu or titlu or title %}
+{% set descrierePagina = seo_descriere or descriere or site.descriere %}
+{% set imaginePagina = seo_imagine or site.og_imagine %}
+
+<title>{% if titluPagina %}{{ titluPagina }} · {{ site.nume }}{% else %}{{ site.nume }} · {{ site.tagline }}{% endif %}</title>
+<meta name="description" content="{{ descrierePagina }}">
+<link rel="canonical" href="{{ site.url }}{{ page.url }}">
+
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ro_RO">
+<meta property="og:site_name" content="{{ site.nume }}">
+<meta property="og:title" content="{% if titluPagina %}{{ titluPagina }} · {{ site.nume }}{% else %}{{ site.nume }}{% endif %}">
+<meta property="og:description" content="{{ descrierePagina }}">
+<meta property="og:url" content="{{ site.url }}{{ page.url }}">
+{% if imaginePagina %}<meta property="og:image" content="{{ site.url }}{{ imaginePagina | img(1200) }}">{% endif %}
+<meta name="twitter:card" content="summary_large_image">
+
+{% if noindex %}<meta name="robots" content="noindex, nofollow">{% endif %}
+
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Literata:opsz,wght@7..72,400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/style.css">
+
+<style>
+:root {
+  --ink: {{ site.culoare_text or "#16202a" }};
+  --accent: {{ site.culoare_accent or "#a97b2f" }};
+  --paper: {{ site.culoare_fundal or "#f3f3f0" }};
+}
+</style>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "HomeAndConstructionBusiness",
+  "name": {{ site.nume | json }},
+  "description": {{ site.descriere | json }},
+  "url": {{ site.url | json }},
+  "telephone": {{ site.telefon | json }},
+  "email": {{ site.email | json }},
+  "areaServed": {{ site.oras | json }},
+  "image": {{ (site.url + (site.og_imagine or "")) | json }}
+}
+</script>
+</head>
+<body>
+
+<a class="skip" href="#continut">Sari la conținut</a>
+
+{% include "partials/antet.njk" %}
+
+<main id="continut">
+  {{ content | safe }}
+</main>
+
+{% include "partials/subsol.njk" %}
+{% include "partials/bara-mobil.njk" %}
+
+<script src="/assets/js/site.js" defer></script>
+{% if site.analitice_interne %}<script src="/assets/js/analitice.js" defer></script>{% endif %}
+</body>
+</html>

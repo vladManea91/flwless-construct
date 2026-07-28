@@ -1,0 +1,75 @@
+---
+layout: layouts/base.njk
+eleventyComputed:
+  seo_titlu: "{{ titlu }}"
+  seo_descriere: "{{ rezumat }}"
+  seo_imagine: "{{ coperta }}"
+---
+
+<article>
+  <div class="wrap" style="padding-top:1rem">
+    <a class="inapoi" href="/proiecte/">← Toate proiectele</a>
+  </div>
+
+  <header class="antet-pagina" style="border-bottom:0;padding-bottom:1.5rem">
+    <div class="wrap">
+      {% if categorie %}<p class="cota"><span>{{ categorie }}</span></p>{% endif %}
+      <h1>{{ titlu }}</h1>
+      {% if rezumat %}<p>{{ rezumat }}</p>{% endif %}
+    </div>
+  </header>
+
+  {% if coperta %}
+    <div class="proiect-hero">
+      <img src="{{ coperta | img(1600, 0.667) }}"
+           srcset="{{ coperta | srcset(0.667) }}"
+           sizes="100vw"
+           alt="{{ titlu }}" fetchpriority="high" width="1600" height="1067">
+    </div>
+  {% endif %}
+
+  <div class="wrap wrap--narrow">
+    <dl class="fisa">
+      {% if locatie %}<div><dt>Locație</dt><dd>{{ locatie }}</dd></div>{% endif %}
+      {% if suprafata %}<div><dt>Suprafață</dt><dd>{{ suprafata }}</dd></div>{% endif %}
+      {% if durata %}<div><dt>Durată</dt><dd>{{ durata }}</dd></div>{% endif %}
+      {% if page.date %}<div><dt>Finalizat</dt><dd>{{ page.date | anul }}</dd></div>{% endif %}
+    </dl>
+
+    <div class="proza">
+      {{ content | safe }}
+    </div>
+
+    {% if lucrari and lucrari.length %}
+      <div style="margin-top:2.5rem">
+        <p class="cota"><span>Ce am făcut</span></p>
+        <ul class="proza">
+          {% for lucrare in lucrari %}<li>{{ lucrare.text }}</li>{% endfor %}
+        </ul>
+      </div>
+    {% endif %}
+  </div>
+
+  {% if galerie and galerie.length %}
+    <section class="section">
+      <div class="wrap">
+        <p class="cota"><span>Poze din lucrare</span></p>
+        <div class="galerie" data-galerie>
+          {% for poza in galerie %}
+            <figure class="galerie__item" role="button" tabindex="0"
+                    data-mare="{{ poza.imagine | img(1800) }}"
+                    data-descriere="{{ poza.descriere }}">
+              <img src="{{ poza.imagine | img(600, 1) }}"
+                   srcset="{{ poza.imagine | srcset(1, 1080) }}"
+                   sizes="(min-width: 68rem) 25vw, (min-width: 44rem) 33vw, 50vw"
+                   alt="{{ poza.descriere or titlu }}" loading="lazy" width="600" height="600">
+              {% if poza.descriere %}<figcaption>{{ poza.descriere }}</figcaption>{% endif %}
+            </figure>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+  {% endif %}
+</article>
+
+{% include "partials/cta.njk" %}

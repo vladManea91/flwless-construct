@@ -1,0 +1,15 @@
+{
+  "seo_titlu": "Galerie",
+  "seo_descriere": "Fotografii din lucrările noastre: apartamente, case, băi și bucătării.",
+  "eticheta": "Galerie",
+  "titlu": "Poze din lucrările terminate",
+  "intro": "Toate fotografiile sunt din șantierele noastre, făcute la predare.",
+  "imagini": [
+    { "imagine": "/images/uploads/galerie-1.jpg", "descriere": "Living apartament 3 camere", "categorie": "Apartament" },
+    { "imagine": "/images/uploads/galerie-2.jpg", "descriere": "Baie cu gresie portelanata", "categorie": "Baie" },
+    { "imagine": "/images/uploads/galerie-3.jpg", "descriere": "Bucatarie deschisa spre living", "categorie": "Bucătărie" },
+    { "imagine": "/images/uploads/galerie-4.jpg", "descriere": "Dormitor matrimonial", "categorie": "Apartament" },
+    { "imagine": "/images/uploads/galerie-5.jpg", "descriere": "Hol si scara interioara", "categorie": "Casă" },
+    { "imagine": "/images/uploads/galerie-6.jpg", "descriere": "Terasa acoperita", "categorie": "Casă" }
+  ]
+}

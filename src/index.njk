@@ -1,0 +1,131 @@
+---
+layout: layouts/base.njk
+permalink: /
+eleventyComputed:
+  seo_titlu: "{{ acasa.seo_titlu }}"
+  seo_descriere: "{{ acasa.seo_descriere }}"
+  seo_imagine: "{{ acasa.hero_imagine }}"
+---
+
+<section class="hero">
+  <div class="hero__imagine">
+    {% if acasa.hero_imagine %}
+      <img src="{{ acasa.hero_imagine | img(1600, 0.62) }}"
+           srcset="{{ acasa.hero_imagine | srcset(0.62) }}"
+           sizes="100vw"
+           alt="{{ acasa.hero_titlu }}"
+           fetchpriority="high" width="1600" height="992">
+    {% endif %}
+  </div>
+  <div class="hero__continut">
+    <div class="wrap">
+      {% if acasa.hero_eticheta %}
+        <p class="cota"><span>{{ acasa.hero_eticheta }}{% if site.oras %} · {{ site.oras }}{% endif %}</span></p>
+      {% endif %}
+      <h1>{{ acasa.hero_titlu }}</h1>
+      <p class="hero__text">{{ acasa.hero_text }}</p>
+      <div class="butoane">
+        {% if acasa.hero_buton_text %}
+          <a class="btn" href="{{ acasa.hero_buton_link or '/proiecte/' }}">{{ acasa.hero_buton_text }}</a>
+        {% endif %}
+        {% if acasa.hero_buton_secundar_text and site.telefon %}
+          <a class="btn btn--pe-imagine" href="tel:{{ site.telefon | telLink }}" data-eveniment="telefon-hero">{{ acasa.hero_buton_secundar_text }}</a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% if acasa.cifre and acasa.cifre.length %}
+  <div class="wrap">
+    <div class="cifre">
+      {% for cifra in acasa.cifre %}
+        <div class="cifre__item">
+          <span class="cifre__valoare">{{ cifra.valoare }}</span>
+          <span class="cifre__eticheta">{{ cifra.eticheta }}</span>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+{% endif %}
+
+<section class="section">
+  <div class="wrap">
+    <div class="despre apare">
+      <div class="despre__text">
+        {% if acasa.despre_eticheta %}<p class="cota"><span>{{ acasa.despre_eticheta }}</span></p>{% endif %}
+        <h2>{{ acasa.despre_titlu }}</h2>
+        <div class="proza">
+          {% for paragraf in acasa.despre_text.split("\n\n") %}
+            {% if paragraf | trim %}<p>{{ paragraf | trim }}</p>{% endif %}
+          {% endfor %}
+        </div>
+      </div>
+      {% if acasa.despre_imagine %}
+        <div class="despre__imagine">
+          <img src="{{ acasa.despre_imagine | img(900) }}"
+               srcset="{{ acasa.despre_imagine | srcset(null, 1080) }}"
+               sizes="(min-width: 62rem) 40vw, 100vw"
+               alt="{{ acasa.despre_titlu }}" loading="lazy" width="900" height="1200">
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% if acasa.servicii and acasa.servicii.length %}
+<section class="section section--plaster">
+  <div class="wrap">
+    {% if acasa.servicii_eticheta %}<p class="cota"><span>{{ acasa.servicii_eticheta }}</span></p>{% endif %}
+    <h2>{{ acasa.servicii_titlu }}</h2>
+    <div class="servicii apare" style="margin-top:2rem">
+      {% for serviciu in acasa.servicii %}
+        <div class="serviciu">
+          <h3>{{ serviciu.titlu }}</h3>
+          <p>{{ serviciu.descriere }}</p>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{% if acasa.pasi and acasa.pasi.length %}
+<section class="section">
+  <div class="wrap">
+    {% if acasa.pasi_eticheta %}<p class="cota"><span>{{ acasa.pasi_eticheta }}</span></p>{% endif %}
+    <h2>{{ acasa.pasi_titlu }}</h2>
+    <div class="pasi apare" style="margin-top:2.5rem">
+      {% for pas in acasa.pasi %}
+        <div class="pas">
+          <div>
+            <h3>{{ pas.titlu }}</h3>
+            <p>{{ pas.descriere }}</p>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{% if collections.proiecte.length %}
+<section class="section section--plaster">
+  <div class="wrap">
+    {% if acasa.proiecte_eticheta %}<p class="cota"><span>{{ acasa.proiecte_eticheta }}</span></p>{% endif %}
+    <h2>{{ acasa.proiecte_titlu }}</h2>
+    <div class="proiecte-grid apare" style="margin-top:2.5rem">
+      {% for proiect in collections.proiecte | head(3) %}
+        {% include "partials/card-proiect.njk" %}
+      {% endfor %}
+    </div>
+    {% if acasa.proiecte_buton_text %}
+      <div class="butoane" style="margin-top:2.5rem">
+        <a class="btn btn--ghost" href="/proiecte/">{{ acasa.proiecte_buton_text }}</a>
+      </div>
+    {% endif %}
+  </div>
+</section>
+{% endif %}
+
+{% include "partials/cta.njk" %}

@@ -1,0 +1,187 @@
+---
+layout: layouts/base.njk
+permalink: /statistici/
+seo_titlu: "Statistici"
+noindex: true
+---
+
+<section class="antet-pagina">
+  <div class="wrap">
+    <p class="cota"><span>Panou privat</span></p>
+    <h1>Statistici site</h1>
+    <p>De unde vin vizitatorii, ce pagini citesc și câți dau click pe telefon sau email.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+
+    <div id="poarta">
+      <label class="contact-card__eticheta" for="parola">Parolă statistici</label>
+      <div style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-top:0.5rem;max-width:28rem">
+        <input id="parola" type="password" autocomplete="current-password"
+               style="flex:1 1 12rem;min-height:48px;padding:0.7rem 0.9rem;border:1px solid var(--line);border-radius:2px;background:var(--paper);color:var(--ink);font-family:var(--display);font-size:1rem">
+        <button class="btn" type="button" id="intra">Intră</button>
+      </div>
+      <p id="eroare" style="display:none;color:#a33;margin-top:0.75rem"></p>
+    </div>
+
+    <div id="panou" style="display:none">
+      <div style="display:flex;flex-wrap:wrap;gap:1rem;align-items:center;justify-content:space-between;margin-bottom:2rem">
+        <div class="filtre" style="margin:0">
+          <button class="filtru" type="button" data-zile="7" aria-pressed="false">7 zile</button>
+          <button class="filtru" type="button" data-zile="30" aria-pressed="true">30 zile</button>
+          <button class="filtru" type="button" data-zile="90" aria-pressed="false">90 zile</button>
+        </div>
+        <button class="filtru" type="button" id="iesi">Ieși din cont</button>
+      </div>
+
+      <div class="cifre" style="margin-bottom:2.5rem">
+        <div class="cifre__item">
+          <span class="cifre__valoare" id="nr-vizualizari">–</span>
+          <span class="cifre__eticheta">pagini văzute</span>
+        </div>
+        <div class="cifre__item">
+          <span class="cifre__valoare" id="nr-vizite">–</span>
+          <span class="cifre__eticheta">vizite</span>
+        </div>
+        <div class="cifre__item">
+          <span class="cifre__valoare" id="nr-actiuni">–</span>
+          <span class="cifre__eticheta">click pe contact</span>
+        </div>
+      </div>
+
+      <div id="grafic" style="margin-bottom:2.5rem"></div>
+      <div id="liste" style="display:grid;gap:2rem"></div>
+    </div>
+
+  </div>
+</section>
+
+<style>
+  #liste { grid-template-columns: 1fr; }
+  @media (min-width: 44rem) { #liste { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 68rem) { #liste { grid-template-columns: repeat(3, 1fr); } }
+  .lista h3 {
+    font-family: var(--display); font-size: 0.7rem; font-weight: 500;
+    letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-50);
+    padding-bottom: 0.6rem; border-bottom: 1px solid var(--line); margin-bottom: 0.75rem;
+  }
+  .lista ol { list-style: none; margin: 0; padding: 0; }
+  .lista li {
+    display: flex; justify-content: space-between; gap: 1rem;
+    padding: 0.45rem 0; font-size: 0.92rem; border-bottom: 1px solid var(--line);
+  }
+  .lista li span:last-child { font-family: var(--display); font-weight: 600; }
+  .lista p { color: var(--ink-50); font-size: 0.9rem; }
+  .bare { display: flex; align-items: flex-end; gap: 2px; height: 90px; border-bottom: 1px solid var(--line); }
+  .bare i { flex: 1; background: var(--accent); min-height: 1px; border-radius: 1px 1px 0 0; opacity: 0.85; }
+  .bare-etichete {
+    display: flex; justify-content: space-between; margin-top: 0.5rem;
+    font-family: var(--display); font-size: 0.68rem; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--ink-50);
+  }
+</style>
+
+<script>
+(function () {
+  var CHEIE = "statistici_token";
+  var poarta = document.getElementById("poarta");
+  var panou = document.getElementById("panou");
+  var eroare = document.getElementById("eroare");
+  var zileActive = 30;
+
+  function esc(text) {
+    return String(text).replace(/[&<>"]/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c];
+    });
+  }
+
+  function lista(titlu, date, gol) {
+    if (!date || !date.length) {
+      return '<div class="lista"><h3>' + titlu + '</h3><p>' + (gol || "Nimic încă.") + '</p></div>';
+    }
+    return '<div class="lista"><h3>' + titlu + '</h3><ol>' +
+      date.map(function (r) {
+        return '<li><span>' + esc(r.nume) + '</span><span>' + r.numar + '</span></li>';
+      }).join("") + '</ol></div>';
+  }
+
+  function grafic(serie) {
+    var maxim = Math.max.apply(null, serie.map(function (p) { return p.numar; }).concat([1]));
+    var bare = serie.map(function (p) {
+      var h = Math.round((p.numar / maxim) * 100);
+      return '<i style="height:' + Math.max(h, 1) + '%" title="' + p.zi + ': ' + p.numar + '"></i>';
+    }).join("");
+    return '<div class="bare">' + bare + '</div><div class="bare-etichete"><span>' +
+      serie[0].zi + '</span><span>' + serie[serie.length - 1].zi + '</span></div>';
+  }
+
+  function incarca(token) {
+    fetch("/api/stats?zile=" + zileActive + "&token=" + encodeURIComponent(token))
+      .then(function (r) {
+        return r.json().then(function (date) {
+          if (!r.ok) throw new Error(date.eroare || "Nu am putut încărca statisticile.");
+          return date;
+        });
+      })
+      .then(function (date) {
+        poarta.style.display = "none";
+        panou.style.display = "block";
+        document.getElementById("nr-vizualizari").textContent = date.vizualizari;
+        document.getElementById("nr-vizite").textContent = date.vizite;
+        document.getElementById("nr-actiuni").textContent =
+          date.evenimente.reduce(function (t, e) { return t + e.numar; }, 0);
+        document.getElementById("grafic").innerHTML = grafic(date.serie);
+        document.getElementById("liste").innerHTML =
+          lista("De unde vin", date.surse) +
+          lista("Pagini vizitate", date.pagini) +
+          lista("Click pe contact", date.evenimente, "Niciun click pe telefon sau email încă.") +
+          lista("Site-uri care trimit trafic", date.referinte, "Nimeni nu a dat link încă.") +
+          lista("Campanii UTM", date.campanii, "Nicio campanie marcată cu UTM.") +
+          lista("Dispozitive", date.dispozitive) +
+          lista("Țări", date.tari) +
+          lista("Tip de trafic", date.medii, "Fără etichete de tip trafic.");
+      })
+      .catch(function (err) {
+        try { localStorage.removeItem(CHEIE); } catch (e) {}
+        poarta.style.display = "block";
+        panou.style.display = "none";
+        eroare.textContent = err.message;
+        eroare.style.display = "block";
+      });
+  }
+
+  document.getElementById("intra").addEventListener("click", function () {
+    var token = document.getElementById("parola").value.trim();
+    if (!token) return;
+    try { localStorage.setItem(CHEIE, token); } catch (e) {}
+    incarca(token);
+  });
+
+  document.getElementById("parola").addEventListener("keydown", function (e) {
+    if (e.key === "Enter") document.getElementById("intra").click();
+  });
+
+  document.getElementById("iesi").addEventListener("click", function () {
+    try { localStorage.removeItem(CHEIE); } catch (e) {}
+    location.reload();
+  });
+
+  document.querySelectorAll("[data-zile]").forEach(function (buton) {
+    buton.addEventListener("click", function () {
+      document.querySelectorAll("[data-zile]").forEach(function (b) {
+        b.setAttribute("aria-pressed", b === buton ? "true" : "false");
+      });
+      zileActive = parseInt(buton.getAttribute("data-zile"), 10);
+      var token = null;
+      try { token = localStorage.getItem(CHEIE); } catch (e) {}
+      if (token) incarca(token);
+    });
+  });
+
+  var salvat = null;
+  try { salvat = localStorage.getItem(CHEIE); } catch (e) {}
+  if (salvat) incarca(salvat);
+})();
+</script>

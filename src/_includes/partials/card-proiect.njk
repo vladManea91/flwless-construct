@@ -1,0 +1,20 @@
+<a class="card" href="{{ proiect.url }}" data-categorie="{{ proiect.data.categorie }}">
+  <div class="card__imagine">
+    {% if proiect.data.coperta %}
+      <img src="{{ proiect.data.coperta | img(800, 0.75) }}"
+           srcset="{{ proiect.data.coperta | srcset(0.75, 1080) }}"
+           sizes="(min-width: 68rem) 33vw, (min-width: 44rem) 50vw, 100vw"
+           alt="{{ proiect.data.titlu }}" loading="lazy" width="800" height="600">
+    {% endif %}
+    {% if proiect.data.categorie %}
+      <span class="card__categorie">{{ proiect.data.categorie }}</span>
+    {% endif %}
+  </div>
+  <h3>{{ proiect.data.titlu }}</h3>
+  {% if proiect.data.rezumat %}<p class="card__rezumat">{{ proiect.data.rezumat | scurt(120) }}</p>{% endif %}
+  <div class="meta">
+    {% if proiect.data.locatie %}<span>{{ proiect.data.locatie }}</span>{% endif %}
+    {% if proiect.data.suprafata %}<span>{{ proiect.data.suprafata }}</span>{% endif %}
+    {% if proiect.date %}<span>{{ proiect.date | anul }}</span>{% endif %}
+  </div>
+</a>
