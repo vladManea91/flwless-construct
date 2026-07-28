@@ -1,24 +1,52 @@
 (function () {
   "use strict";
 
-  /* ---------- meniu mobil ---------- */
-  var antet = document.querySelector("[data-antet]");
+  /* ---------- meniu mobil: sertar pe tot ecranul ---------- */
   var butonMeniu = document.querySelector("[data-meniu]");
+  var panouMeniu = document.querySelector("[data-navigatie-mobil]");
+  var butonInchide = document.querySelector("[data-meniu-inchide]");
 
-  if (antet && butonMeniu) {
+  if (butonMeniu && panouMeniu) {
+    var esteDeschis = function () {
+      return panouMeniu.getAttribute("data-deschis") === "true";
+    };
+
+    var deschideMeniul = function () {
+      panouMeniu.setAttribute("data-deschis", "true");
+      panouMeniu.setAttribute("aria-hidden", "false");
+      butonMeniu.setAttribute("aria-expanded", "true");
+      document.body.style.overflow = "hidden";
+      var primulLink = panouMeniu.querySelector("a");
+      if (primulLink) primulLink.focus();
+    };
+
+    var inchideMeniul = function (readuFocus) {
+      panouMeniu.setAttribute("data-deschis", "false");
+      panouMeniu.setAttribute("aria-hidden", "true");
+      butonMeniu.setAttribute("aria-expanded", "false");
+      document.body.style.overflow = "";
+      if (readuFocus) butonMeniu.focus();
+    };
+
     butonMeniu.addEventListener("click", function () {
-      var deschis = antet.getAttribute("data-deschis") === "true";
-      antet.setAttribute("data-deschis", deschis ? "false" : "true");
-      butonMeniu.setAttribute("aria-expanded", deschis ? "false" : "true");
-      var text = butonMeniu.querySelector("[data-meniu-text]");
-      if (text) text.textContent = deschis ? "Meniu" : "Închide";
+      esteDeschis() ? inchideMeniul(true) : deschideMeniul();
+    });
+
+    if (butonInchide) {
+      butonInchide.addEventListener("click", function () { inchideMeniul(true); });
+    }
+
+    panouMeniu.querySelectorAll("a").forEach(function (link) {
+      link.addEventListener("click", function () { inchideMeniul(false); });
     });
 
     document.addEventListener("keydown", function (e) {
-      if (e.key === "Escape" && antet.getAttribute("data-deschis") === "true") {
-        butonMeniu.click();
-        butonMeniu.focus();
-      }
+      if (e.key === "Escape" && esteDeschis()) inchideMeniul(true);
+    });
+
+    // dacă cineva mărește fereastra peste pragul de desktop cu meniul deschis
+    window.addEventListener("resize", function () {
+      if (window.innerWidth >= 992 && esteDeschis()) inchideMeniul(false);
     });
   }
 

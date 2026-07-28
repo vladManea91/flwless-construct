@@ -2,7 +2,11 @@
   <div class="wrap">
     <div class="subsol__grid">
       <div>
-        <div class="subsol__nume">{{ site.nume }}</div>
+        {% if site.logo %}
+          <img class="subsol__logo" src="{{ site.logo }}" alt="{{ site.nume }}" width="1024" height="300" loading="lazy">
+        {% else %}
+          <div class="subsol__nume">{{ site.nume }}</div>
+        {% endif %}
         <p>{{ site.footer_text }}</p>
       </div>
 

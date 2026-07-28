@@ -6,13 +6,19 @@
   "scripts": {
     "build": "eleventy",
     "start": "eleventy --serve",
-    "dev": "netlify dev"
+    "dev": "netlify dev",
+    "test:dev": "node --test \"tests/dev/*.test.mjs\"",
+    "test:qa": "npm run build --silent && node --test \"tests/qa/*.test.mjs\"",
+    "test:class": "node --test \"tests/class/*.test.mjs\"",
+    "test": "npm run test:dev --silent && npm run test:qa --silent && npm run test:class --silent"
   },
   "dependencies": {
     "@netlify/blobs": "^8.1.0"
   },
   "devDependencies": {
     "@11ty/eleventy": "^2.0.1",
+    "cheerio": "^1.2.0",
+    "js-yaml": "^5.2.2",
     "luxon": "^3.4.4"
   }
 }

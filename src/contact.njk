@@ -26,7 +26,7 @@ eleventyComputed:
       {% endif %}
       <div>
         <p class="persoana__nume">{{ contact.nume }}</p>
-        <p class="persoana__rol">{{ contact.rol }}</p>
+        {% if contact.rol %}<p class="persoana__rol">{{ contact.rol }}</p>{% endif %}
       </div>
     </div>
 

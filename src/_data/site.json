@@ -1,24 +1,36 @@
 {
-  "nume": "Atelier Nord",
+  "nume": "Flawless Construct",
   "tagline": "Amenajări interioare la cheie",
-  "descriere": "Amenajăm apartamente, case și băi la cheie. Proiectare, execuție și finisaje, cu un singur interlocutor de la prima vizită până la predare.",
+  "descriere": "Flawless Construct amenajează apartamente, case și băi la cheie. Proiectare, execuție și finisaje, cu un singur interlocutor de la prima vizită până la predare.",
   "url": "https://numele-site-ului.netlify.app",
   "oras": "București",
-  "telefon": "+40 721 000 000",
-  "email": "contact@exemplu.ro",
-  "logo": "",
-  "og_imagine": "/images/uploads/hero.jpg",
-  "culoare_text": "#16202A",
-  "culoare_accent": "#A97B2F",
-  "culoare_fundal": "#F3F3F0",
+  "telefon": "+40 730 122 097",
+  "email": "wless.construct@gmail.com",
+  "logo": "/images/brand/logo-orizontal-inchis.png",
+  "og_imagine": "/images/brand/og-image.jpg",
+  "culoare_text": "#1b1b1d",
+  "culoare_accent": "#c09018",
+  "culoare_fundal": "#f4f2ec",
   "meniu": [
-    { "eticheta": "Acasă", "link": "/" },
-    { "eticheta": "Proiecte", "link": "/proiecte/" },
-    { "eticheta": "Galerie", "link": "/galerie/" },
-    { "eticheta": "Contact", "link": "/contact/" }
+    {
+      "eticheta": "Acasă",
+      "link": "/"
+    },
+    {
+      "eticheta": "Proiecte",
+      "link": "/proiecte/"
+    },
+    {
+      "eticheta": "Galerie",
+      "link": "/galerie/"
+    },
+    {
+      "eticheta": "Contact",
+      "link": "/contact/"
+    }
   ],
-  "buton_antet_text": "Sună acum",
-  "footer_text": "Amenajări interioare pentru apartamente, case și spații comerciale.",
+  "buton_antet_text": "Contactează-ne",
+  "footer_text": "Flawless Construct. Amenajări interioare pentru apartamente, case și spații comerciale.",
   "facebook": "",
   "instagram": "",
   "tiktok": "",

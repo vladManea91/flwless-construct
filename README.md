@@ -47,14 +47,15 @@ nu fie tratat ca fișier ascuns la upload.
 ## 3. Netlify
 
 1. **Add new site → Import an existing project** → alege repo-ul.
-2. Setările de build sunt citite din `netlify.toml`, deci nu trebuie completate manual:
+2. Setările de build sunt citite din `netlify.toml`, deci nu trebuie completate manual
+   (Node 22, `npm run build`, publică din `_site`):
    - Build command: `npm run build`
    - Publish directory: `_site`
    - Functions directory: `netlify/functions`
    - Node 22
 3. Deploy. Site-ul urcă pe un subdomeniu de tip `nume-random.netlify.app`.
 4. **Site configuration → Change site name** ca să pui un subdomeniu decent,
-   de exemplu `atelier-nord.netlify.app`.
+   de exemplu `flawless-construct.netlify.app`.
 5. Pune adresa asta înapoi în `site.json` (`url`) și în `config.yml`
    (`site_url`, `display_url`), apoi commit. Fără asta, sitemap-ul și linkurile de
    share către Facebook/WhatsApp arată greșit.
@@ -162,6 +163,35 @@ Dacă vrei și pozele și funcțiile local:
 npm install -g netlify-cli
 netlify dev
 ```
+
+## 7bis. Teste
+
+Trei seturi de teste automate, fără niciun serviciu extern:
+
+```bash
+npm test              # rulează toate cele trei seturi, în ordine
+npm run test:dev      # ~50 teste peste funcțiile pure (filtre, statistici)
+npm run test:qa       # construiește site-ul, apoi verifică HTML-ul rezultat
+npm run test:class    # verifică sistemul de culori și clasele CSS
+```
+
+**`test:dev`** — testează bucățile de logică din `lib/filtre.js` și
+`lib/analitice.mjs` izolat, fără Eleventy și fără rețea: formatarea datelor în
+română, generarea adreselor de imagine, agregarea statisticilor pe zile.
+
+**`test:qa`** — construiește site-ul (`npm run build`) și verifică rezultatul din
+`_site/`: toate paginile există, linkurile interne nu sunt rupte, pozele
+referite chiar există, titlurile SEO sunt unice, sitemap-ul e corect, datele de
+contact din pagină corespund cu setările, meniul mobil are structura cerută.
+
+**`test:class`** — verifică sistemul vizual: fiecare token de culoare din
+`:root` se rezolvă corect, combinațiile text/fundal folosite în site trec
+pragul de contrast WCAG AA, iar fiecare clasă CSS folosită într-un șablon
+există cu adevărat în foaia de stil (și invers).
+
+Dacă modifici culorile din panoul de administrare (Setări site), rulează din
+nou `npm run test:class` — testele de contrast recalculează totul cu culorile
+noi din `src/_data/site.json` și pică dacă o combinație nu mai e lizibilă.
 
 ---
 

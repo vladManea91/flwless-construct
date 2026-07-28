@@ -4,7 +4,7 @@
     <a href="mailto:{{ site.email }}" data-eveniment="email-bara">Trimite email</a>
   {% endif %}
   {% if site.telefon %}
-    <a href="tel:{{ site.telefon | telLink }}" data-eveniment="telefon-bara">Sună acum</a>
+    <a href="tel:{{ site.telefon | telLink }}" data-eveniment="telefon-bara">{{ site.buton_antet_text or "Contactează-ne" }}</a>
   {% endif %}
 </div>
 {% endif %}
