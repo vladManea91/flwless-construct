@@ -292,10 +292,13 @@ test("config.yml nu mai conține valori de test neînlocuite", () => {
   assert.ok(!raw.includes("numele-site-ului.netlify.app"), "a rămas un domeniu placeholder");
 });
 
-test("media_library are proprietatea name, cerută de schema Decap CMS", () => {
-  // regresie: fără `name`, panoul de administrare refuză să pornească deloc,
-  // cu eroarea "'media_library' must have required property 'name'"
+test("media_library nu e setat, ca să nu ceară o integrare externă neînregistrată", () => {
+  // regresie: media_library.name trebuie să indice o bibliotecă externă chiar
+  // înregistrată prin registerMediaLibrary (uploadcare, cloudinary etc.).
+  // "default" nu există ca atare — Decap CMS eșuează la pornire cu:
+  // "Missing external media library 'default'. Please use 'registerMediaLibrary'..."
+  // Fără cheia media_library, Decap folosește galeria lui proprie, incorporată.
   const cms = citesteYaml("src/admin/config.yml");
-  assert.ok(cms.media_library, "lipsește media_library din config.yml");
-  assert.ok(cms.media_library.name, "media_library trebuie să aibă proprietatea name (ex: 'default')");
+  assert.equal(cms.media_library, undefined,
+    "media_library nu trebuie setat decât dacă e o bibliotecă externă chiar înregistrată în admin/index.html");
 });

@@ -211,8 +211,10 @@ Clientul urcă poze direct din telefon, deci vor fi mari. Nu trebuie să faci ni
 fiecare `<img>` trece prin Netlify Image CDN și primește variante de
 480 / 768 / 1080 / 1600 / 2000 px, servite după lățimea ecranului.
 
-Limita din panou e de 12 MB per fișier. Se schimbă din `config.yml`,
-`media_library.config.max_file_size`.
+Nu există o limită de mărime impusă din panou (asta necesită o bibliotecă externă
+de media, cum ar fi Uploadcare, ceea ce complică autentificarea pentru client).
+În practică limita reală vine de la GitHub: fișiere peste 100 MB sunt refuzate
+direct de git. Pentru poze de telefon, asta nu e niciodată o problemă.
 
 Pozele stau în repo, în `src/images/uploads/`. Dacă în timp devin multe sute,
 merită mutate pe Cloudinary, dar până la câteva sute de MB nu e o problemă.

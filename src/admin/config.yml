@@ -42,10 +42,9 @@ publish_mode: simple
 media_folder: "src/images/uploads"
 public_folder: "/images/uploads"
 
-media_library:
-  name: default
-  config:
-    max_file_size: 12000000
+# Nu setam media_library: cheia asta e doar pentru integrari externe
+# (Uploadcare, Cloudinary etc.), inregistrate separat prin registerMediaLibrary.
+# Fara ea, Decap CMS foloseste automat galeria lui proprie, incorporata.
 
 editor:
   preview: false
