@@ -186,17 +186,23 @@ collections:
         label: "Acasă"
         file: "src/_data/acasa.json"
         fields:
-          - label: "Sus de tot (prima imagine)"
-            name: "hero_eticheta"
-            widget: "string"
-            required: false
-            hint: "Textul mic scris cu majuscule, deasupra titlului."
-          - { label: "Titlu mare", name: "hero_titlu", widget: "string" }
-          - { label: "Text sub titlu", name: "hero_text", widget: "text", required: false }
-          - { label: "Poza de fundal", name: "hero_imagine", widget: "image", required: false }
-          - { label: "Buton principal (text)", name: "hero_buton_text", widget: "string", required: false }
-          - { label: "Buton principal (link)", name: "hero_buton_link", widget: "string", required: false, default: "/proiecte/" }
-          - { label: "Buton secundar (text)", name: "hero_buton_secundar_text", widget: "string", required: false, hint: "Sună la numărul din Setări." }
+          - label: "Prima imagine (sus de tot)"
+            name: "hero"
+            widget: "object"
+            collapsed: false
+            summary: "{{fields.titlu}}"
+            fields:
+              - label: "Etichetă mică"
+                name: "eticheta"
+                widget: "string"
+                required: false
+                hint: "Textul mic scris cu majuscule, deasupra titlului."
+              - { label: "Titlu mare", name: "titlu", widget: "string" }
+              - { label: "Text sub titlu", name: "text", widget: "text", required: false }
+              - { label: "Poza de fundal", name: "imagine", widget: "image", required: false }
+              - { label: "Buton principal (text)", name: "buton_text", widget: "string", required: false }
+              - { label: "Buton principal (link)", name: "buton_link", widget: "string", required: false, default: "/proiecte/" }
+              - { label: "Buton secundar (text)", name: "buton_secundar_text", widget: "string", required: false, hint: "Sună la numărul din Setări." }
 
           - label: "Cifre pe bandă"
             name: "cifre"
@@ -208,46 +214,76 @@ collections:
               - { label: "Cifra", name: "valoare", widget: "string" }
               - { label: "Sub cifră", name: "eticheta", widget: "string" }
 
-          - { label: "Cine suntem — etichetă", name: "despre_eticheta", widget: "string", required: false }
-          - { label: "Cine suntem — titlu", name: "despre_titlu", widget: "string", required: false }
-          - label: "Cine suntem — text"
-            name: "despre_text"
-            widget: "text"
-            required: false
-            hint: "Lasă un rând gol între paragrafe."
-          - { label: "Cine suntem — poză", name: "despre_imagine", widget: "image", required: false }
-
-          - { label: "Servicii — etichetă", name: "servicii_eticheta", widget: "string", required: false }
-          - { label: "Servicii — titlu", name: "servicii_titlu", widget: "string", required: false }
-          - label: "Servicii"
-            name: "servicii"
-            widget: "list"
-            required: false
-            label_singular: "Serviciu"
+          - label: "Secțiune: Cine suntem"
+            name: "despre"
+            widget: "object"
+            collapsed: true
             summary: "{{fields.titlu}}"
             fields:
-              - { label: "Titlu", name: "titlu", widget: "string" }
-              - { label: "Descriere", name: "descriere", widget: "text" }
+              - { label: "Etichetă mică", name: "eticheta", widget: "string", required: false, hint: "Apare deasupra titlului. Poți schimba și numele secțiunii aici." }
+              - { label: "Titlu", name: "titlu", widget: "string", required: false }
+              - label: "Text"
+                name: "text"
+                widget: "text"
+                required: false
+                hint: "Lasă un rând gol între paragrafe."
+              - { label: "Poză", name: "imagine", widget: "image", required: false }
 
-          - { label: "Cum lucrăm — etichetă", name: "pasi_eticheta", widget: "string", required: false }
-          - { label: "Cum lucrăm — titlu", name: "pasi_titlu", widget: "string", required: false }
-          - label: "Pași"
-            name: "pasi"
-            widget: "list"
-            required: false
-            label_singular: "Pas"
+          - label: "Secțiune: Servicii"
+            name: "servicii_sectiune"
+            widget: "object"
+            collapsed: true
             summary: "{{fields.titlu}}"
             fields:
-              - { label: "Titlu", name: "titlu", widget: "string" }
-              - { label: "Descriere", name: "descriere", widget: "text" }
+              - { label: "Etichetă mică", name: "eticheta", widget: "string", required: false, hint: "Apare deasupra titlului. Poți schimba și numele secțiunii aici." }
+              - { label: "Titlu", name: "titlu", widget: "string", required: false }
+              - label: "Lista de servicii"
+                name: "lista"
+                widget: "list"
+                required: false
+                label_singular: "Serviciu"
+                summary: "{{fields.titlu}}"
+                fields:
+                  - { label: "Titlu", name: "titlu", widget: "string" }
+                  - { label: "Descriere", name: "descriere", widget: "text" }
 
-          - { label: "Proiecte recente — etichetă", name: "proiecte_eticheta", widget: "string", required: false }
-          - { label: "Proiecte recente — titlu", name: "proiecte_titlu", widget: "string", required: false }
-          - { label: "Proiecte recente — text buton", name: "proiecte_buton_text", widget: "string", required: false }
+          - label: "Secțiune: Cum lucrăm"
+            name: "pasi_sectiune"
+            widget: "object"
+            collapsed: true
+            summary: "{{fields.titlu}}"
+            fields:
+              - { label: "Etichetă mică", name: "eticheta", widget: "string", required: false, hint: "Apare deasupra titlului. Poți schimba și numele secțiunii aici." }
+              - { label: "Titlu", name: "titlu", widget: "string", required: false }
+              - label: "Pași"
+                name: "lista"
+                widget: "list"
+                required: false
+                label_singular: "Pas"
+                summary: "{{fields.titlu}}"
+                fields:
+                  - { label: "Titlu", name: "titlu", widget: "string" }
+                  - { label: "Descriere", name: "descriere", widget: "text" }
 
-          - { label: "Chemare la acțiune — titlu", name: "cta_titlu", widget: "string", required: false, hint: "Banda închisă la culoare de la finalul paginilor." }
-          - { label: "Chemare la acțiune — text", name: "cta_text", widget: "text", required: false }
-          - { label: "Chemare la acțiune — buton", name: "cta_buton_text", widget: "string", required: false }
+          - label: "Secțiune: Proiecte recente"
+            name: "proiecte_sectiune"
+            widget: "object"
+            collapsed: true
+            summary: "{{fields.titlu}}"
+            fields:
+              - { label: "Etichetă mică", name: "eticheta", widget: "string", required: false, hint: "Apare deasupra titlului. Poți schimba și numele secțiunii aici." }
+              - { label: "Titlu", name: "titlu", widget: "string", required: false }
+              - { label: "Text buton", name: "buton_text", widget: "string", required: false }
+
+          - label: "Secțiune: Chemare la acțiune"
+            name: "cta"
+            widget: "object"
+            collapsed: true
+            summary: "{{fields.titlu}}"
+            fields:
+              - { label: "Titlu", name: "titlu", widget: "string", required: false, hint: "Banda închisă la culoare de la finalul paginilor." }
+              - { label: "Text", name: "text", widget: "text", required: false }
+              - { label: "Text buton", name: "buton_text", widget: "string", required: false }
 
           - { label: "Titlu pentru Google", name: "seo_titlu", widget: "string", required: false }
           - { label: "Descriere pentru Google", name: "seo_descriere", widget: "text", required: false }

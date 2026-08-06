@@ -302,3 +302,38 @@ test("media_library nu e setat, ca să nu ceară o integrare externă neînregis
   assert.equal(cms.media_library, undefined,
     "media_library nu trebuie setat decât dacă e o bibliotecă externă chiar înregistrată în admin/index.html");
 });
+
+// ---------------------------------------------------------------------------
+// Etichetele secțiunilor din Acasă se actualizează live în panou
+// ---------------------------------------------------------------------------
+
+test("secțiunile de pe Acasă sunt grupate ca obiecte, cu eticheta legată de titlul introdus de client", () => {
+  // Înainte, eticheta din panou pentru fiecare secțiune era un text fix
+  // ("Cine suntem — titlu"), care nu se schimba niciodată, indiferent ce
+  // scria clientul. Acum fiecare secțiune e un widget "object" cu "summary"
+  // legat de propriul câmp titlu, deci eticheta din panou se actualizează
+  // pe măsură ce clientul scrie.
+  const cms = citesteYaml("src/admin/config.yml");
+  const acasa = cms.collections.find((c) => c.name === "pagini").files.find((f) => f.name === "acasa");
+
+  const sectiuni = ["hero", "despre", "servicii_sectiune", "pasi_sectiune", "proiecte_sectiune", "cta"];
+  for (const nume of sectiuni) {
+    const camp = acasa.fields.find((f) => f.name === nume);
+    assert.ok(camp, `lipsește secțiunea ${nume} din config.yml`);
+    assert.equal(camp.widget, "object", `${nume} trebuie să fie un widget object, ca să poată avea summary`);
+    assert.ok(camp.summary, `${nume} nu are summary — eticheta nu se va actualiza live`);
+    assert.match(camp.summary, /\{\{fields\.titlu\}\}/,
+      `${nume}: summary trebuie legat de propriul câmp "titlu", nu de un text fix`);
+  }
+});
+
+test("datele de pe Acasă respectă structura imbricată așteptată de config.yml", () => {
+  const acasa = citesteJson("src/_data/acasa.json");
+  for (const nume of ["hero", "despre", "servicii_sectiune", "pasi_sectiune", "proiecte_sectiune", "cta"]) {
+    assert.ok(acasa[nume] && typeof acasa[nume] === "object" && !Array.isArray(acasa[nume]),
+      `acasa.${nume} trebuie să fie un obiect, în oglindă cu widget-ul object din config.yml`);
+    assert.ok("titlu" in acasa[nume], `acasa.${nume} trebuie să aibă un câmp titlu`);
+  }
+  assert.ok(Array.isArray(acasa.servicii_sectiune.lista));
+  assert.ok(Array.isArray(acasa.pasi_sectiune.lista));
+});

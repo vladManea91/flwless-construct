@@ -1,54 +1,66 @@
 {
   "seo_titlu": "Amenajări interioare la cheie",
   "seo_descriere": "Amenajăm apartamente, case și băi la cheie. Vezi proiectele finalizate și cere o estimare.",
-  "hero_eticheta": "Amenajări interioare",
-  "hero_titlu": "Punem la punct casa, de la schiță până la ultimul finisaj",
-  "hero_text": "Lucrăm cu o singură echipă pe tot parcursul șantierului. Tu discuți cu o singură persoană, de la prima măsurătoare până la predarea cheilor.",
-  "hero_imagine": "/images/uploads/hero.jpg",
-  "hero_buton_text": "Vezi proiectele",
-  "hero_buton_link": "/proiecte/",
-  "hero_buton_secundar_text": "Sună-ne",
+  "hero": {
+    "eticheta": "Amenajări interioare",
+    "titlu": "Punem la punct casa, de la schiță până la ultimul finisaj",
+    "text": "Lucrăm cu o singură echipă pe tot parcursul șantierului. Tu discuți cu o singură persoană, de la prima măsurătoare până la predarea cheilor.",
+    "imagine": "/images/uploads/hero.jpg",
+    "buton_text": "Vezi proiectele",
+    "buton_link": "/proiecte/",
+    "buton_secundar_text": "Sună-ne"
+  },
   "cifre": [
     { "valoare": "120", "eticheta": "lucrări finalizate" },
     { "valoare": "12", "eticheta": "ani de șantier" },
     { "valoare": "8", "eticheta": "oameni în echipă" }
   ],
-  "despre_eticheta": "Cine suntem",
-  "despre_titlu": "O echipă mică, aceiași oameni pe șantier de la început până la final",
-  "despre_text": "Am început în 2013 cu renovări de apartamente în cartierele vechi și am rămas la același fel de lucru: puține șantiere deschise în același timp, oameni pe care îi cunoaștem, materiale pe care le-am pus deja de sute de ori.\n\nNu subcontractăm lucrarea la echipe pe care nu le-am verificat. Când ceva nu iese cum trebuie, revenim și rezolvăm, pentru că lucrăm mai mult din recomandări decât din reclame.\n\nÎnainte să începem, primești un deviz pe categorii de lucrări, cu cantități și termene. Așa știi de la început unde se duce fiecare sumă.",
-  "despre_imagine": "/images/uploads/despre.jpg",
-  "servicii_eticheta": "Ce facem",
-  "servicii_titlu": "Lucrări pe care le luăm de la zero până la predare",
-  "servicii": [
-    {
-      "titlu": "Apartamente la cheie",
-      "descriere": "Demolări, instalații, gletuit, finisaje, montaj mobilier. Predăm apartamentul curat și funcțional."
-    },
-    {
-      "titlu": "Case și mansarde",
-      "descriere": "Compartimentări, termoizolații, șape, finisaje interioare și exterioare, coordonate cu proiectantul tău."
-    },
-    {
-      "titlu": "Băi și bucătării",
-      "descriere": "Refacerea completă a instalațiilor, hidroizolații, faianță și gresie, montaj obiecte sanitare."
-    },
-    {
-      "titlu": "Zugrăveli și finisaje",
-      "descriere": "Reparații pereți, glet, vopsitorii decorative, tavane rigips, parchet și plinte."
-    }
-  ],
-  "pasi_eticheta": "Cum lucrăm",
-  "pasi_titlu": "Patru etape, în aceeași ordine, la fiecare lucrare",
-  "pasi": [
-    { "titlu": "Vizită și măsurători", "descriere": "Venim la fața locului, măsurăm și discutăm ce vrei să schimbi. Vizita este gratuită." },
-    { "titlu": "Deviz pe categorii", "descriere": "Primești un deviz scris, cu cantități, materiale și termen estimat pentru fiecare etapă." },
-    { "titlu": "Execuție", "descriere": "Lucrăm cu echipa proprie și îți trimitem poze de pe șantier la finalul fiecărei săptămâni." },
-    { "titlu": "Predare și garanție", "descriere": "Curățenie finală, verificare împreună și garanție scrisă pentru manoperă." }
-  ],
-  "proiecte_eticheta": "Lucrări recente",
-  "proiecte_titlu": "Ultimele proiecte finalizate",
-  "proiecte_buton_text": "Vezi toate proiectele",
-  "cta_titlu": "Ai un apartament sau o casă de pus la punct?",
-  "cta_text": "Spune-ne ce ai de făcut și venim să vedem la fața locului. Estimarea o primești în scris, fără obligații.",
-  "cta_buton_text": "Scrie-ne"
+  "despre": {
+    "eticheta": "Cine suntem",
+    "titlu": "O echipă mică, aceiași oameni pe șantier de la început până la final",
+    "text": "Am început în 2013 cu renovări de apartamente în cartierele vechi și am rămas la același fel de lucru: puține șantiere deschise în același timp, oameni pe care îi cunoaștem, materiale pe care le-am pus deja de sute de ori.\n\nNu subcontractăm lucrarea la echipe pe care nu le-am verificat. Când ceva nu iese cum trebuie, revenim și rezolvăm, pentru că lucrăm mai mult din recomandări decât din reclame.\n\nÎnainte să începem, primești un deviz pe categorii de lucrări, cu cantități și termene. Așa știi de la început unde se duce fiecare sumă.",
+    "imagine": "/images/uploads/despre.jpg"
+  },
+  "servicii_sectiune": {
+    "eticheta": "Ce facem",
+    "titlu": "Lucrări pe care le luăm de la zero până la predare",
+    "lista": [
+      {
+        "titlu": "Apartamente la cheie",
+        "descriere": "Demolări, instalații, gletuit, finisaje, montaj mobilier. Predăm apartamentul curat și funcțional."
+      },
+      {
+        "titlu": "Case și mansarde",
+        "descriere": "Compartimentări, termoizolații, șape, finisaje interioare și exterioare, coordonate cu proiectantul tău."
+      },
+      {
+        "titlu": "Băi și bucătării",
+        "descriere": "Refacerea completă a instalațiilor, hidroizolații, faianță și gresie, montaj obiecte sanitare."
+      },
+      {
+        "titlu": "Zugrăveli și finisaje",
+        "descriere": "Reparații pereți, glet, vopsitorii decorative, tavane rigips, parchet și plinte."
+      }
+    ]
+  },
+  "pasi_sectiune": {
+    "eticheta": "Cum lucrăm",
+    "titlu": "Patru etape, în aceeași ordine, la fiecare lucrare",
+    "lista": [
+      { "titlu": "Vizită și măsurători", "descriere": "Venim la fața locului, măsurăm și discutăm ce vrei să schimbi. Vizita este gratuită." },
+      { "titlu": "Deviz pe categorii", "descriere": "Primești un deviz scris, cu cantități, materiale și termen estimat pentru fiecare etapă." },
+      { "titlu": "Execuție", "descriere": "Lucrăm cu echipa proprie și îți trimitem poze de pe șantier la finalul fiecărei săptămâni." },
+      { "titlu": "Predare și garanție", "descriere": "Curățenie finală, verificare împreună și garanție scrisă pentru manoperă." }
+    ]
+  },
+  "proiecte_sectiune": {
+    "eticheta": "Lucrări recente",
+    "titlu": "Ultimele proiecte finalizate",
+    "buton_text": "Vezi toate proiectele"
+  },
+  "cta": {
+    "titlu": "Ai un apartament sau o casă de pus la punct?",
+    "text": "Spune-ne ce ai de făcut și venim să vedem la fața locului. Estimarea o primești în scris, fără obligații.",
+    "buton_text": "Scrie-ne"
+  }
 }
