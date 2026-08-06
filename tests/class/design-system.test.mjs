@@ -291,3 +291,11 @@ test("config.yml nu mai conține valori de test neînlocuite", () => {
   assert.ok(!raw.includes("SITE-ID-DE-LA-DECAPBRIDGE"), "a rămas un placeholder de site-id neînlocuit");
   assert.ok(!raw.includes("numele-site-ului.netlify.app"), "a rămas un domeniu placeholder");
 });
+
+test("media_library are proprietatea name, cerută de schema Decap CMS", () => {
+  // regresie: fără `name`, panoul de administrare refuză să pornească deloc,
+  // cu eroarea "'media_library' must have required property 'name'"
+  const cms = citesteYaml("src/admin/config.yml");
+  assert.ok(cms.media_library, "lipsește media_library din config.yml");
+  assert.ok(cms.media_library.name, "media_library trebuie să aibă proprietatea name (ex: 'default')");
+});
