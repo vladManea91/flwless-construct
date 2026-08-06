@@ -8,24 +8,16 @@ Netlify Blobs pentru statistici, Netlify Image CDN pentru redimensionarea pozelo
 
 ---
 
-## 1. Ce faci înainte de deploy (5 minute)
+## 1. Ce faci înainte de deploy
 
-Sunt patru locuri unde trebuie înlocuite valorile de test. Toate sunt marcate cu
-`<- înlocuiește` în cod.
+Configurația e deja completată cu valorile reale (repo GitHub, site-ul DecapBridge,
+domeniul `flawlessconstruct.ro`), deci nu mai trebuie umplute placeholdere.
+Verifică doar că, dacă schimbi domeniul mai târziu, îl actualizezi în **două** locuri:
 
-**`src/admin/config.yml`**, primele rânduri:
+- **`src/_data/site.json`**, câmpul `url` — fără `/` la final.
+- **`src/admin/config.yml`**, câmpurile `site_url` și `display_url`.
 
-```yaml
-repo: UTILIZATOR-GITHUB/NUME-REPO
-identity_url: https://auth.decapbridge.com/sites/SITE-ID-DE-LA-DECAPBRIDGE
-site_url: https://numele-site-ului.netlify.app
-display_url: https://numele-site-ului.netlify.app
-```
-
-**`src/_data/site.json`**, câmpul `url`: adresa reală a site-ului, fără `/` la final.
-Restul (nume firmă, telefon, email) le poate schimba clientul din panou.
-
-Nu e nevoie să atingi altceva în cod.
+Restul (nume firmă, telefon, email) le poate schimba clientul singur din panou.
 
 ---
 
@@ -65,26 +57,44 @@ Domeniul se adaugă mai târziu din **Domain management**, fără să schimbi co
 
 ---
 
-## 4. Autentificare pentru client (DecapBridge)
+## 4. Autentificare pentru client (DecapBridge, PKCE)
 
 Netlify Identity a fost repus pe listă în februarie 2026, dar DecapBridge rămâne
 varianta mai bună aici: clientul se loghează cu emailul lui, fără cont de GitHub.
 
+Configurația din `src/admin/config.yml` folosește deja autentificarea PKCE a
+DecapBridge (`auth_type: pkce`, `base_url`, `auth_endpoint`, `auth_token_endpoint`),
+cu site-ul deja creat pe DecapBridge. Dacă trebuie refăcut de la zero:
+
 1. Cont pe <https://decapbridge.com>, apoi **Create New Site**.
 2. Completează:
-   - **Repository**: `utilizator/nume-repo`
+   - **Repository**: `vladManea91/flwless-construct`
    - **GitHub token**: token fine-grained, generat din GitHub → Settings →
      Developer Settings → Personal access tokens → Fine-grained tokens.
      Expirare: **No expiration**. Acces: doar repo-ul ăsta. Permisiuni:
      **Contents: Read and write** și **Pull requests: Read and write**.
-   - **Decap CMS URL**: `https://nume-site.netlify.app/admin/`
-3. DecapBridge îți dă `repo`, `identity_url` și `gateway_url`. Le pui în
-   `src/admin/config.yml` peste valorile de test.
+   - **Decap CMS URL**: `https://flawlessconstruct.ro/admin/`
+3. DecapBridge generează blocul `backend:` (cu `auth_endpoint`, `auth_token_endpoint`,
+   `gateway_url`) — se copiază peste blocul din `config.yml`.
 4. **Manage Collaborators** → adaugi numele și emailul clientului →
    **Send Invitation Email**. Primește invitație, își face parola, gata.
 
-Dacă `/admin` se învârte la login, verifică în ordinea asta: site-id-ul din
-`identity_url`, permisiunile tokenului, numele branch-ului (`main`).
+### Eroarea „Access token does not have permission to access this repository”
+
+Aproape întotdeauna e una dintre astea trei, verificate direct pe token-ul din
+GitHub → Settings → Developer settings → Fine-grained tokens → tokenul respectiv:
+
+- **Lipsește o permisiune.** Trebuie bifate explicit **Contents: Read and write**
+  ȘI **Pull requests: Read and write** — nu doar Read la ambele.
+- **Token-ul e legat de alt repo.** Sub „Repository access”, verifică exact
+  `vladManea91/flwless-construct`, nu un fork sau un alt nume vechi de repo.
+- **Repo-ul e sub o organizație.** Un token de cont personal are nevoie de
+  aprobare explicită de „Organization access” dacă repo-ul nu e pe contul
+  personal — poate rămâne „pending” până un admin de organizație îl aprobă.
+
+Dacă `/admin` se învârte la login (altă eroare, diferită de cea de mai sus),
+verifică în ordinea asta: site-id-ul din `auth_endpoint`/`auth_token_endpoint`,
+permisiunile tokenului, numele branch-ului (`main`).
 
 ---
 

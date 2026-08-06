@@ -13,7 +13,7 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import path from "node:path";
 import {
-  RADACINA, SRC, citeste, citesteJson,
+  RADACINA, SRC, citeste, citesteJson, citesteYaml,
   citesteTokens, rezolvaCuloare, contrast, fisiere
 } from "../ajutor.mjs";
 
@@ -260,4 +260,34 @@ test("cache-ul lung pentru assets/ e sigur doar pentru că adresele au hash de c
   const base = citeste("src/_includes/layouts/base.njk");
   assert.match(base, /style\.css\?v=\{\{\s*assets\.css\s*\}\}/,
     "cache-ul lung e nesigur dacă linkul CSS nu mai are hash de versiune");
+});
+
+// ---------------------------------------------------------------------------
+// Configurația panoului de administrare (Decap CMS + DecapBridge)
+// ---------------------------------------------------------------------------
+
+test("admin/config.yml e YAML valid și folosește autentificare PKCE prin DecapBridge", () => {
+  const cms = citesteYaml("src/admin/config.yml");
+  assert.equal(cms.backend.name, "git-gateway");
+  assert.equal(cms.backend.auth_type, "pkce");
+  assert.match(cms.backend.repo, /^[\w-]+\/[\w-]+$/, "repo trebuie să fie în formatul utilizator/nume-repo");
+  assert.equal(cms.backend.branch, "main");
+  for (const cheie of ["base_url", "auth_endpoint", "auth_token_endpoint", "gateway_url"]) {
+    assert.ok(cms.backend[cheie], `lipsește backend.${cheie}, necesar pentru PKCE`);
+  }
+});
+
+test("site_url din config.yml corespunde cu url din site.json", () => {
+  const cms = citesteYaml("src/admin/config.yml");
+  const site = citesteJson("src/_data/site.json");
+  assert.equal(cms.site_url, site.url,
+    "dacă domeniul se schimbă, trebuie actualizat în ambele fișiere, nu doar în unul");
+  assert.equal(cms.display_url, site.url);
+});
+
+test("config.yml nu mai conține valori de test neînlocuite", () => {
+  const raw = citeste("src/admin/config.yml");
+  assert.ok(!raw.includes("NUME-REPO"), "a rămas un placeholder de repo neînlocuit");
+  assert.ok(!raw.includes("SITE-ID-DE-LA-DECAPBRIDGE"), "a rămas un placeholder de site-id neînlocuit");
+  assert.ok(!raw.includes("numele-site-ului.netlify.app"), "a rămas un domeniu placeholder");
 });

@@ -597,3 +597,11 @@ test("hash-ul de cache-busting se schimbă dacă schimbi conținutul fișierului
   assert.match(html, new RegExp(`site\\.js\\?v=${hashAsteptat}`),
     "hash-ul din HTML nu corespunde cu conținutul curent al fișierului — build-ul e neactualizat");
 });
+
+test("subsolul public nu conține o legătură directă către /admin/", () => {
+  for (const p of pagini()) {
+    if (p.url === "/admin/") continue;
+    assert.ok(!p.$(".subsol").html().includes("/admin"),
+      `${p.url}: subsolul nu trebuie să trimită vizitatorii spre panoul de administrare`);
+  }
+});

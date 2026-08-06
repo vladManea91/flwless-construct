@@ -1,25 +1,40 @@
 # =====================================================================
 #  PANOU DE ADMINISTRARE
 #  Aici se configurează ce poate edita clientul. Textele sunt în română.
-#  Vezi README.md, secțiunea "Autentificare", pentru site-id.
+#  Autentificare: DecapBridge (PKCE), vezi https://decapbridge.com
 # =====================================================================
 
+# Foloseste DecapBridge PKCE auth (necesar)
 backend:
   name: git-gateway
-  repo: UTILIZATOR-GITHUB/NUME-REPO          # <- înlocuiește
+  repo: vladManea91/flwless-construct
   branch: main
-  identity_url: https://auth.decapbridge.com/sites/SITE-ID-DE-LA-DECAPBRIDGE   # <- înlocuiește
+  auth_type: pkce
+  base_url: https://auth.decapbridge.com
+  auth_endpoint: /sites/45958f17-584f-49ca-81e5-a72c900b80aa/pkce
+  auth_token_endpoint: /sites/45958f17-584f-49ca-81e5-a72c900b80aa/token
   gateway_url: https://gateway.decapbridge.com
+  # Cine a facut ce (optional)
   commit_messages:
-    create: 'Adăugat {{collection}} "{{slug}}" - {{author-name}}'
-    update: 'Modificat {{collection}} "{{slug}}" - {{author-name}}'
-    delete: 'Șters {{collection}} "{{slug}}" - {{author-name}}'
-    uploadMedia: 'Încărcat "{{path}}" - {{author-name}}'
-    deleteMedia: 'Șters "{{path}}" - {{author-name}}'
+    create: 'Create {{collection}} "{{slug}}" - {{author-name}} <{{author-login}}> via DecapBridge'
+    update: 'Update {{collection}} "{{slug}}" - {{author-name}} <{{author-login}}> via DecapBridge'
+    delete: 'Delete {{collection}} "{{slug}}" - {{author-name}} <{{author-login}}> via DecapBridge'
+    uploadMedia: 'Upload "{{path}}" - {{author-name}} <{{author-login}}> via DecapBridge'
+    deleteMedia: 'Delete "{{path}}" - {{author-name}} <{{author-login}}> via DecapBridge'
+    openAuthoring: 'Message {{message}} - {{author-name}} <{{author-login}}> via DecapBridge'
 
+# Campuri PKCE (optional, recomandat)
+auth:
+  email_claim: email
+  first_name_claim: first_name
+  last_name_claim: last_name
+  avatar_url_claim: avatar_url
+
+# Logo mai bun Decap + Bridge (optional)
 logo_url: https://decapbridge.com/decapcms-with-bridge.svg
-site_url: https://numele-site-ului.netlify.app          # <- înlocuiește
-display_url: https://numele-site-ului.netlify.app       # <- înlocuiește
+# Linkuri catre site in Decap CMS (optional)
+site_url: https://flawlessconstruct.ro
+display_url: https://flawlessconstruct.ro
 
 locale: ro
 publish_mode: simple
